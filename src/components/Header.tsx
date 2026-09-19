@@ -22,6 +22,8 @@ import {
   Sparkles,
   Camera,
   Bot,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { UserRole, NotificationAlert } from '../types';
 import { ROLE_PROFILES } from '../data/initialData';
@@ -49,6 +51,8 @@ interface HeaderProps {
   onOpenChatbot?: () => void;
   onOpenInvoiceScanner?: () => void;
   activeTab?: ActiveTab;
+  theme?: 'light' | 'dark';
+  onToggleTheme?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -71,6 +75,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenChatbot,
   onOpenInvoiceScanner,
   activeTab = 'dashboard',
+  theme = 'light',
+  onToggleTheme,
 }) => {
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -107,7 +113,7 @@ export const Header: React.FC<HeaderProps> = ({
   });
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md text-slate-800 border-b border-slate-200/80 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+    <header className="sticky top-0 z-30 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border-b border-slate-200/80 dark:border-slate-800 shadow-[0_1px_2px_rgba(0,0,0,0.02)] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-3">
           {/* Left: Mobile Toggle & Breadcrumbs Pathway */}
@@ -115,7 +121,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               id="mobile-sidebar-toggle"
               onClick={onToggleMobileSidebar}
-              className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none transition-colors"
+              className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none transition-colors"
               aria-label="Toggle Navigation"
             >
               <Menu className="w-5 h-5" />
@@ -126,17 +132,17 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center font-bold text-white shadow-2xs">
                 <span className="text-xs font-mono tracking-wider">ERP</span>
               </div>
-              <span className="font-bold text-slate-900 tracking-tight text-xs">Enterprise Suite</span>
+              <span className="font-bold text-slate-900 dark:text-white tracking-tight text-xs">Enterprise Suite</span>
             </div>
 
             {/* Desktop Breadcrumb Hierarchy */}
             <div className="hidden lg:flex items-center gap-2 text-xs">
               <span className="text-slate-400 font-medium">Enterprise</span>
-              <span className="text-slate-300">/</span>
-              <span className="font-semibold text-slate-800 bg-slate-100/80 px-2 py-0.5 rounded-md border border-slate-200/60">
+              <span className="text-slate-300 dark:text-slate-700">/</span>
+              <span className="font-semibold text-slate-800 dark:text-slate-200 bg-slate-100/80 dark:bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-200/60 dark:border-slate-700">
                 {tabTitles[activeTab]}
               </span>
-              <span className="flex items-center gap-1 ml-2 text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60 font-mono">
+              <span className="flex items-center gap-1 ml-2 text-[11px] text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-200/60 dark:border-emerald-800/60 font-mono">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                 <span>Live Sync (14ms)</span>
               </span>
@@ -149,7 +155,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={onOpenCommandPalette}
               className="relative cursor-pointer group"
             >
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none group-hover:text-indigo-600 transition-colors" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors" />
               <input
                 id="header-global-search"
                 type="text"
@@ -157,27 +163,44 @@ export const Header: React.FC<HeaderProps> = ({
                 value={searchQuery}
                 onClick={onOpenCommandPalette}
                 placeholder="Search SKUs, staff, invoices, ledger actions..."
-                className="w-full pl-9 pr-20 py-1.5 bg-slate-100/80 hover:bg-slate-100 border border-slate-200/90 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none cursor-pointer transition-all shadow-2xs group-hover:border-slate-300"
+                className="w-full pl-9 pr-20 py-1.5 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-700 rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none cursor-pointer transition-all shadow-2xs group-hover:border-slate-300 dark:group-hover:border-slate-600"
               />
               <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
-                <kbd className="px-1.5 py-0.5 rounded bg-white border border-slate-200 text-[10px] font-mono font-semibold text-slate-500 shadow-2xs">
+                <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400 shadow-2xs">
                   ⌘K
                 </kbd>
               </div>
             </div>
           </div>
 
-          {/* Right Controls: Command, MFA, Google Sync, Notifications, RBAC */}
+          {/* Right Controls: Theme Toggle, Command, MFA, Google Sync, Notifications, RBAC */}
           <div className="flex items-center gap-2">
+            {/* Dark / Light Theme Toggle Button */}
+            {onToggleTheme && (
+              <button
+                id="header-theme-toggle-btn"
+                onClick={onToggleTheme}
+                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                className="p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-2xs transition-colors"
+                aria-label="Toggle Theme"
+              >
+                {theme === 'dark' ? (
+                  <Sun className="w-4 h-4 text-amber-400" />
+                ) : (
+                  <Moon className="w-4 h-4 text-slate-600" />
+                )}
+              </button>
+            )}
+
             {/* Quick Command Palette Button for Mobile / Small Screens */}
             <button
               id="header-command-palette-btn"
               onClick={onOpenCommandPalette}
               title="Open Command Center (⌘K)"
-              className="md:hidden p-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-2xs transition-colors"
+              className="md:hidden p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs transition-colors"
               aria-label="Command Palette"
             >
-              <Command className="w-4 h-4 text-indigo-600" />
+              <Command className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
             </button>
 
             {/* Keyboard Shortcuts Trigger Button */}
@@ -185,10 +208,10 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-shortcuts-btn"
               onClick={onOpenShortcutsModal}
               title="Keyboard Shortcuts Reference Guide (?)"
-              className="hidden sm:flex items-center gap-1 px-2 py-1.5 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-2xs text-xs font-medium transition-colors"
+              className="hidden sm:flex items-center gap-1 px-2 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs text-xs font-medium transition-colors"
             >
               <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-              <kbd className="text-[10px] font-mono font-semibold text-slate-500">?</kbd>
+              <kbd className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400">?</kbd>
             </button>
 
             {/* MFA Security Status Pill */}
@@ -212,9 +235,9 @@ export const Header: React.FC<HeaderProps> = ({
                 id="header-scan-invoice-btn"
                 onClick={onOpenInvoiceScanner}
                 title="Scan Invoice or Bill with Gemini AI Vision (⌘I)"
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/40 text-slate-700 hover:text-emerald-800 text-xs font-medium shadow-2xs transition-all"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-700 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/40 text-slate-700 dark:text-slate-300 hover:text-emerald-800 dark:hover:text-emerald-300 text-xs font-medium shadow-2xs transition-all"
               >
-                <Camera className="w-3.5 h-3.5 text-emerald-600" />
+                <Camera className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                 <span className="hidden lg:inline">Scan Bill</span>
               </button>
             )}
@@ -242,14 +265,14 @@ export const Header: React.FC<HeaderProps> = ({
               title="Google Workspace (Sheets, Drive, Gmail) Integrations"
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-colors shadow-2xs ${
                 googleConnected
-                  ? 'bg-indigo-50/70 text-indigo-700 border-indigo-200/80 hover:bg-indigo-100/70'
-                  : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                  ? 'bg-indigo-50/70 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800 hover:bg-indigo-100/70 dark:hover:bg-indigo-900/70'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
               }`}
             >
               <div className="flex items-center -space-x-1">
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                <HardDrive className="w-3.5 h-3.5 text-blue-600" />
-                <Mail className="w-3.5 h-3.5 text-red-600" />
+                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <HardDrive className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                <Mail className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
               </div>
               <span className="hidden xl:inline">
                 {googleConnected ? 'Workspace Active' : 'Connect Cloud'}
@@ -261,7 +284,7 @@ export const Header: React.FC<HeaderProps> = ({
               id="header-customize-workspace-btn"
               onClick={onOpenCustomizeModal}
               title="Customize Role Workspace Widgets"
-              className="p-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-2xs transition-colors"
+              className="p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white shadow-2xs transition-colors"
               aria-label="Customize Workspace"
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -272,7 +295,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 id="header-notifications-btn"
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative p-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:text-slate-900 shadow-2xs transition-colors"
+                className="relative p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white shadow-2xs transition-colors"
                 aria-label="Notifications"
               >
                 <Bell className="w-4 h-4" />
@@ -285,21 +308,21 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* Notifications Dropdown Panel */}
               {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white border border-slate-200 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in duration-150">
-                  <div className="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between">
+                <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in duration-150">
+                  <div className="px-4 py-2.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-slate-900">Enterprise Alerts</span>
-                      <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-50 text-rose-700 border border-rose-200 font-semibold">
+                      <span className="font-bold text-xs text-slate-900 dark:text-white">Enterprise Alerts</span>
+                      <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800 font-semibold">
                         {unreadCount} new
                       </span>
                     </div>
 
                     {/* Filter Tabs */}
-                    <div className="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg text-[10px] font-medium">
+                    <div className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-0.5 rounded-lg text-[10px] font-medium">
                       <button
                         onClick={() => setNotifFilter('all')}
                         className={`px-2 py-0.5 rounded-md transition-colors ${
-                          notifFilter === 'all' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500'
+                          notifFilter === 'all' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs font-semibold' : 'text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         All
@@ -307,7 +330,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <button
                         onClick={() => setNotifFilter('unread')}
                         className={`px-2 py-0.5 rounded-md transition-colors ${
-                          notifFilter === 'unread' ? 'bg-white text-slate-900 shadow-2xs font-semibold' : 'text-slate-500'
+                          notifFilter === 'unread' ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-2xs font-semibold' : 'text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         Unread
@@ -315,7 +338,7 @@ export const Header: React.FC<HeaderProps> = ({
                       <button
                         onClick={() => setNotifFilter('critical')}
                         className={`px-2 py-0.5 rounded-md transition-colors ${
-                          notifFilter === 'critical' ? 'bg-white text-rose-700 shadow-2xs font-semibold' : 'text-slate-500'
+                          notifFilter === 'critical' ? 'bg-white dark:bg-slate-700 text-rose-700 dark:text-rose-400 shadow-2xs font-semibold' : 'text-slate-500 dark:text-slate-400'
                         }`}
                       >
                         Critical
@@ -323,15 +346,15 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
                   </div>
 
-                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-100">
+                  <div className="max-h-80 overflow-y-auto divide-y divide-slate-100 dark:divide-slate-800">
                     {filteredNotifications.length === 0 ? (
-                      <div className="p-6 text-center text-xs text-slate-500">No alerts matching filter</div>
+                      <div className="p-6 text-center text-xs text-slate-500 dark:text-slate-400">No alerts matching filter</div>
                     ) : (
                       filteredNotifications.map((notif) => (
                         <div
                           key={notif.id}
                           className={`p-3 transition-colors ${
-                            notif.read ? 'bg-white opacity-80' : 'bg-slate-50/70'
+                            notif.read ? 'bg-white dark:bg-slate-900 opacity-80' : 'bg-slate-50/70 dark:bg-slate-800/50'
                           }`}
                         >
                           <div className="flex items-start justify-between gap-2">
@@ -344,9 +367,9 @@ export const Header: React.FC<HeaderProps> = ({
                                 <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
                               )}
                               <div>
-                                <h4 className="text-xs font-semibold text-slate-900 leading-tight">{notif.title}</h4>
-                                <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">{notif.message}</p>
-                                <span className="text-[10px] text-slate-400 mt-1 inline-block font-mono">{notif.timestamp}</span>
+                                <h4 className="text-xs font-semibold text-slate-900 dark:text-white leading-tight">{notif.title}</h4>
+                                <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">{notif.message}</p>
+                                <span className="text-[10px] text-slate-400 dark:text-slate-500 mt-1 inline-block font-mono">{notif.timestamp}</span>
                               </div>
                             </div>
 
@@ -354,7 +377,7 @@ export const Header: React.FC<HeaderProps> = ({
                               {!notif.read && (
                                 <button
                                   onClick={() => onMarkNotificationRead(notif.id)}
-                                  className="text-[10px] text-indigo-600 hover:text-indigo-800 font-medium"
+                                  className="text-[10px] text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 font-medium"
                                 >
                                   Dismiss
                                 </button>
@@ -363,7 +386,7 @@ export const Header: React.FC<HeaderProps> = ({
                                 <button
                                   onClick={() => onSendGmailNotification(notif)}
                                   title="Dispatch alert directly through Gmail API"
-                                  className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 hover:bg-rose-100 text-[10px] font-medium border border-rose-200"
+                                  className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-100 text-[10px] font-medium border border-rose-200 dark:border-rose-800"
                                 >
                                   <Mail className="w-2.5 h-2.5" />
                                   <span>Gmail</span>
@@ -376,8 +399,8 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </div>
 
-                  <div className="px-4 py-2 border-t border-slate-100 bg-slate-50/70 text-center">
-                    <p className="text-[10px] text-slate-500">
+                  <div className="px-4 py-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50 text-center">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">
                       Auto-triggered when stock drops below safety buffers or payroll batches require sign-off.
                     </p>
                   </div>
@@ -390,25 +413,25 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 id="header-role-dropdown-btn"
                 onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                className="flex items-center gap-2 pl-2.5 pr-2 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-left shadow-2xs transition-colors"
+                className="flex items-center gap-2 pl-2.5 pr-2 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-left shadow-2xs transition-colors"
               >
-                <div className="w-2 h-2 rounded-full bg-indigo-600"></div>
+                <div className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400"></div>
                 <div className="hidden lg:block text-left">
-                  <div className="text-xs font-semibold text-slate-900 truncate max-w-[130px]">
+                  <div className="text-xs font-semibold text-slate-900 dark:text-white truncate max-w-[130px]">
                     {roleProfile.title.split('(')[0]}
                   </div>
-                  <div className="text-[10px] text-slate-500 leading-none">RBAC Profile</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-none">RBAC Profile</div>
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               {showRoleDropdown && (
-                <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-200 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in duration-150">
-                  <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in duration-150">
+                  <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
                       Switch RBAC Profile
                     </span>
-                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 font-mono font-semibold">
+                    <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-mono font-semibold">
                       Multi-Tenant
                     </span>
                   </div>
@@ -426,26 +449,26 @@ export const Header: React.FC<HeaderProps> = ({
                           }}
                           className={`w-full text-left p-2.5 rounded-xl text-xs transition-colors flex items-start gap-2.5 ${
                             isSelected
-                              ? 'bg-indigo-50 text-indigo-900 border border-indigo-200/80 font-semibold'
-                              : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                              ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-900 dark:text-indigo-200 border border-indigo-200/80 dark:border-indigo-800 font-semibold'
+                              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
                           }`}
                         >
                           <div
                             className={`w-2 h-2 rounded-full mt-1.5 shrink-0 ${
-                              isSelected ? 'bg-indigo-600' : 'bg-slate-300'
+                              isSelected ? 'bg-indigo-600 dark:bg-indigo-400' : 'bg-slate-300 dark:bg-slate-600'
                             }`}
                           />
                           <div>
-                            <div className="font-semibold text-slate-900">{profile.title}</div>
-                            <div className="text-[10px] text-slate-500 line-clamp-1 mt-0.5">{profile.description}</div>
+                            <div className="font-semibold text-slate-900 dark:text-white">{profile.title}</div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{profile.description}</div>
                           </div>
                         </button>
                       );
                     })}
                   </div>
 
-                  <div className="px-3 py-2 border-t border-slate-100 bg-slate-50/70">
-                    <p className="text-[10px] text-slate-500">
+                  <div className="px-3 py-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/50">
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400">
                       Workspaces and navigation automatically adapt based on your selected role permissions.
                     </p>
                   </div>

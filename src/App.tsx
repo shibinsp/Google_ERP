@@ -136,6 +136,26 @@ export default function App() {
   // Security & MFA State
   const [mfaVerified, setMfaVerified] = useState(true);
 
+  // Theme State (Light / Dark)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || saved === 'light') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const handleToggleTheme = () => {
+    setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+  };
+
   // Google Workspace Integration State
   const [googleConnected, setGoogleConnected] = useState(true);
   const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false);
@@ -604,7 +624,7 @@ export default function App() {
   const pendingPayrollCount = payroll.filter((p) => p.status === 'pending_approval').length;
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex font-sans antialiased selection:bg-indigo-600 selection:text-white">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex font-sans antialiased selection:bg-indigo-600 selection:text-white transition-colors duration-200">
       {/* Enterprise Toast Notification Banner */}
       {toastMessage && (
         <div
@@ -676,6 +696,8 @@ export default function App() {
           onOpenChatbot={() => setIsChatbotOpen(true)}
           onOpenInvoiceScanner={() => setIsInvoiceScannerOpen(true)}
           activeTab={activeTab}
+          theme={theme}
+          onToggleTheme={handleToggleTheme}
         />
 
         {/* Workspace Canvas Container */}
