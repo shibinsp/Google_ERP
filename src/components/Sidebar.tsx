@@ -17,11 +17,13 @@ import {
   Bot,
   Cpu,
   Scale,
+  Factory,
+  ShoppingBag,
 } from 'lucide-react';
 import { UserRole } from '../types';
 import { ROLE_PROFILES } from '../data/initialData';
 
-export type ActiveTab = 'dashboard' | 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance';
+export type ActiveTab = 'dashboard' | 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales';
 
 interface SidebarProps {
   activeTab: ActiveTab;
@@ -63,7 +65,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     icon: React.ElementType;
     badge?: number;
     badgeColor?: string;
-    moduleKey: 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance';
+    moduleKey: 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales';
   }
 
   const operationsNav: NavItem[] = [
@@ -80,6 +82,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badge: lowStockCount > 0 ? lowStockCount : undefined,
       badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
       moduleKey: 'inventory',
+    },
+    {
+      id: 'manufacturing',
+      label: 'Manufacturing & MRP',
+      icon: Factory,
+      moduleKey: 'manufacturing',
+    },
+    {
+      id: 'crm_sales',
+      label: 'CRM & Quote-to-Order',
+      icon: ShoppingBag,
+      moduleKey: 'crm_sales',
     },
     {
       id: 'hrms',

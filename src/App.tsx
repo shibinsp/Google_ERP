@@ -29,11 +29,17 @@ import {
   AuditLogEntry,
   NotificationAlert,
   DashboardWidgetConfig,
+  WorkOrder,
+  CustomerAccount,
+  SalesQuote,
+  SalesOrder,
 } from './types';
 
 import { AgenticMeshView } from './components/AgenticMeshView';
 import { MCPIntegrationView } from './components/MCPIntegrationView';
 import { GovernanceComplianceView } from './components/GovernanceComplianceView';
+import { ManufacturingView } from './components/ManufacturingView';
+import { CRMSalesView } from './components/CRMSalesView';
 
 import {
   INITIAL_INVENTORY,
@@ -53,6 +59,10 @@ import {
   INITIAL_MCP_TOOLS,
   INITIAL_EU_AI_ACT_RECORDS,
   INITIAL_HALLUCINATION_CHECKS,
+  INITIAL_WORK_ORDERS,
+  INITIAL_CUSTOMERS,
+  INITIAL_SALES_QUOTES,
+  INITIAL_SALES_ORDERS,
 } from './data/initialData';
 
 import {
@@ -98,6 +108,12 @@ export default function App() {
   const [mcpTools, setMcpTools] = useState(INITIAL_MCP_TOOLS);
   const [euActRecords, setEuActRecords] = useState(INITIAL_EU_AI_ACT_RECORDS);
   const [hallucinationChecks, setHallucinationChecks] = useState(INITIAL_HALLUCINATION_CHECKS);
+
+  // Manufacturing & CRM States
+  const [workOrders, setWorkOrders] = useState<WorkOrder[]>(INITIAL_WORK_ORDERS);
+  const [customers, setCustomers] = useState<CustomerAccount[]>(INITIAL_CUSTOMERS);
+  const [quotes, setQuotes] = useState<SalesQuote[]>(INITIAL_SALES_QUOTES);
+  const [orders, setOrders] = useState<SalesOrder[]>(INITIAL_SALES_ORDERS);
 
   // Security & MFA State
   const [mfaVerified, setMfaVerified] = useState(true);
@@ -814,6 +830,64 @@ export default function App() {
                 );
                 logAuditEvent('Security', 'Security', `Audit Committee sign-off approved for Hallucination Check ${checkId}`);
                 showToast('Human-in-the-loop oversight sign-off approved!');
+              }}
+            />
+          )}
+
+          {activeTab === 'manufacturing' && (
+            <ManufacturingView
+              workOrders={workOrders}
+              onUpdateWorkOrderStatus={(woId, newStatus) => {
+                setWorkOrders((prev) =>
+                  prev.map((w) => (w.id === woId ? { ...w, status: newStatus } : w))
+                );
+                showToast(`Work Order ${woId} status updated to ${newStatus.toUpperCase()}`);
+              }}
+              onCreateWorkOrder={(newWo) => {
+                const wo: WorkOrder = {
+                  ...newWo,
+                  id: `WO-${Date.now().toString().slice(-4)}`,
+                };
+                setWorkOrders((prev) => [wo, ...prev]);
+                showToast(`Work Order ${wo.workOrderNumber} created on shop floor.`);
+              }}
+            />
+          )}
+
+          {activeTab === 'crm_sales' && (
+            <CRMSalesView
+              customers={customers}
+              quotes={quotes}
+              orders={orders}
+              onCreateQuote={(newQuote) => {
+                const q: SalesQuote = {
+                  ...newQuote,
+                  id: `quote-${Date.now()}`,
+                };
+                setQuotes((prev) => [q, ...prev]);
+                showToast(`Sales Quote ${q.quoteNumber} issued to customer.`);
+              }}
+              onConvertQuoteToOrder={(quoteId) => {
+                const targetQuote = quotes.find((q) => q.id === quoteId);
+                if (targetQuote) {
+                  setQuotes((prev) =>
+                    prev.map((q) => (q.id === quoteId ? { ...q, status: 'approved' } : q))
+                  );
+                  const newSo: SalesOrder = {
+                    id: `so-${Date.now()}`,
+                    orderNumber: `SO-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+                    quoteReference: targetQuote.quoteNumber,
+                    customerName: targetQuote.customerName,
+                    orderDate: new Date().toISOString().slice(0, 10),
+                    promisedShipDate: new Date(Date.now() + 14 * 86400000).toISOString().slice(0, 10),
+                    totalAmount: targetQuote.totalAmount,
+                    status: 'processing',
+                    shippingCarrier: 'FedEx Freight',
+                    trackingNumber: `FX-${Math.floor(100000000 + Math.random() * 900000000)}`,
+                  };
+                  setOrders((prev) => [newSo, ...prev]);
+                  showToast(`Quote ${targetQuote.quoteNumber} converted to Sales Order ${newSo.orderNumber}!`);
+                }
               }}
             />
           )}

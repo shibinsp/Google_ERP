@@ -20,6 +20,12 @@ import {
   EUAIActModuleRecord,
   HallucinationGuardrailCheck,
   EmpiricalROIMetric,
+  WorkOrder,
+  CustomerAccount,
+  SalesQuote,
+  SalesOrder,
+  MultiEntityConsolidation,
+  LotSerialRecord,
 } from '../types';
 
 export const ROLE_PROFILES: Record<UserRole, RoleProfile> = {
@@ -1479,4 +1485,187 @@ export const INITIAL_EMPIRICAL_ROI_METRICS: EmpiricalROIMetric[] = [
     iconName: 'FileCheck',
   }
 ];
+
+export const INITIAL_WORK_ORDERS: WorkOrder[] = [
+  {
+    id: 'wo-101',
+    workOrderNumber: 'WO-2026-901',
+    finishedGoodSku: 'SYS-EDGE-CORTEX7',
+    finishedGoodName: 'Industrial Edge Processing Cortex-M7 Node',
+    targetQuantity: 250,
+    completedQuantity: 180,
+    startDate: '2026-09-10',
+    targetCompletionDate: '2026-09-24',
+    status: 'in_production',
+    shopFloorStation: 'Assembly Line B / SMT Station 3',
+    unitProductionCost: 480.00,
+    totalOrderCost: 120000.00,
+    allocatedBom: [
+      { componentSku: 'MCU-8842', componentName: 'NXP Cortex-M7 Microcontroller', quantityRequired: 250, unitCost: 18.50, extendedCost: 4625.00 },
+      { componentSku: 'OPT-800G-QSFP', componentName: '800G QSFP-DD Transceiver Module', quantityRequired: 500, unitCost: 145.00, extendedCost: 72500.00 },
+      { componentSku: 'ALU-6061-ROD', componentName: '6061 Structural Aluminum Chassis Enclosure', quantityRequired: 250, unitCost: 42.00, extendedCost: 10500.00 },
+    ],
+  },
+  {
+    id: 'wo-102',
+    workOrderNumber: 'WO-2026-902',
+    finishedGoodSku: 'OPT-PANEL-48P',
+    finishedGoodName: '48-Port High-Density Fiber Distribution Panel',
+    targetQuantity: 100,
+    completedQuantity: 100,
+    startDate: '2026-09-01',
+    targetCompletionDate: '2026-09-15',
+    status: 'completed',
+    shopFloorStation: 'Quality Inspection Bay 2',
+    unitProductionCost: 310.00,
+    totalOrderCost: 31000.00,
+    allocatedBom: [
+      { componentSku: 'PKG-ESD-BOX', componentName: 'ESD Shielded Packaging Box', quantityRequired: 100, unitCost: 4.50, extendedCost: 450.00 },
+    ],
+  }
+];
+
+export const INITIAL_CUSTOMERS: CustomerAccount[] = [
+  {
+    id: 'cust-01',
+    accountNumber: 'CUST-APEX-88',
+    companyName: 'Apex Aeronautics Global',
+    contactName: 'Marcus Vance',
+    contactEmail: 'billing@apexaero.com',
+    creditLimitUSD: 500000.00,
+    outstandingBalanceUSD: 142000.00,
+    tier: 'Enterprise Platinum',
+    status: 'active',
+  },
+  {
+    id: 'cust-02',
+    accountNumber: 'CUST-LOCKHEED-01',
+    companyName: 'Lockheed Martin Systems Division',
+    contactName: 'Sarah Jenkins',
+    contactEmail: 's.jenkins@lm-systems.com',
+    creditLimitUSD: 1000000.00,
+    outstandingBalanceUSD: 289000.00,
+    tier: 'Enterprise Platinum',
+    status: 'active',
+  },
+  {
+    id: 'cust-03',
+    accountNumber: 'CUST-TOYOTA-LOG',
+    companyName: 'Toyota Motor Logistics North America',
+    contactName: 'Kenji Takahashi',
+    contactEmail: 'k.takahashi@toyota-logistics.com',
+    creditLimitUSD: 750000.00,
+    outstandingBalanceUSD: 45000.00,
+    tier: 'Gold Volume',
+    status: 'active',
+  }
+];
+
+export const INITIAL_SALES_QUOTES: SalesQuote[] = [
+  {
+    id: 'quote-501',
+    quoteNumber: 'Q-2026-8801',
+    customerId: 'cust-01',
+    customerName: 'Apex Aeronautics Global',
+    createdDate: '2026-09-12',
+    validUntil: '2026-10-12',
+    subtotal: 185000.00,
+    discountPercent: 10,
+    taxAmount: 13320.00,
+    totalAmount: 179820.00,
+    status: 'approved',
+    lineItems: [
+      { sku: 'SYS-EDGE-CORTEX7', description: 'Industrial Edge Processing Cortex-M7 Node', quantity: 150, unitPrice: 850.00, total: 127500.00 },
+      { sku: 'OPT-800G-QSFP', description: '800G QSFP-DD Transceiver Module', quantity: 200, unitPrice: 287.50, total: 57500.00 },
+    ],
+  }
+];
+
+export const INITIAL_SALES_ORDERS: SalesOrder[] = [
+  {
+    id: 'so-901',
+    orderNumber: 'SO-2026-4412',
+    quoteReference: 'Q-2026-8801',
+    customerName: 'Apex Aeronautics Global',
+    orderDate: '2026-09-14',
+    promisedShipDate: '2026-09-28',
+    totalAmount: 179820.00,
+    status: 'processing',
+    shippingCarrier: 'FedEx Priority Freight',
+    trackingNumber: 'FX-8849201942',
+  },
+  {
+    id: 'so-902',
+    orderNumber: 'SO-2026-4413',
+    customerName: 'Lockheed Martin Systems Division',
+    orderDate: '2026-09-18',
+    promisedShipDate: '2026-10-02',
+    totalAmount: 310000.00,
+    status: 'confirmed',
+    shippingCarrier: 'DHL Global Forwarding',
+    trackingNumber: 'DHL-992104812',
+  }
+];
+
+export const INITIAL_ENTITIES: MultiEntityConsolidation[] = [
+  {
+    entityId: 'ent-01',
+    entityName: 'Global HQ & North America Hub',
+    region: 'US-East (Dallas, TX)',
+    baseCurrency: 'USD',
+    exchangeRateToUSD: 1.000,
+    localRevenue: 9850000.00,
+    consolidatedRevenueUSD: 9850000.00,
+    localOperatingExpenses: 4200000.00,
+    consolidatedOpExUSD: 4200000.00,
+  },
+  {
+    entityId: 'ent-02',
+    entityName: 'EMEA Distribution GmbH',
+    region: 'Europe (Frankfurt, Germany)',
+    baseCurrency: 'EUR',
+    exchangeRateToUSD: 1.085,
+    localRevenue: 3400000.00,
+    consolidatedRevenueUSD: 3689000.00,
+    localOperatingExpenses: 1500000.00,
+    consolidatedOpExUSD: 1627500.00,
+  },
+  {
+    entityId: 'ent-03',
+    entityName: 'APAC Tech Core Pte Ltd',
+    region: 'Asia-Pacific (Singapore)',
+    baseCurrency: 'SGD',
+    exchangeRateToUSD: 0.760,
+    localRevenue: 1720000.00,
+    consolidatedRevenueUSD: 1307200.00,
+    localOperatingExpenses: 820000.00,
+    consolidatedOpExUSD: 623200.00,
+  }
+];
+
+export const INITIAL_LOT_SERIALS: LotSerialRecord[] = [
+  {
+    id: 'ls-01',
+    sku: 'OPT-800G-QSFP',
+    itemName: '800G QSFP-DD Transceiver Module',
+    lotNumber: 'LOT-2026-Q3-A',
+    serialNumber: 'SN-800G-9941208',
+    manufacturingDate: '2026-08-10',
+    expirationDate: '2031-08-10',
+    warehouseLocation: 'WH-North / Bay 4 / Shelf B',
+    status: 'active',
+  },
+  {
+    id: 'ls-02',
+    sku: 'MCU-8842',
+    itemName: 'NXP Cortex-M7 Microcontroller',
+    lotNumber: 'LOT-2026-Q2-C',
+    serialNumber: 'SN-MCU-4412098',
+    manufacturingDate: '2026-06-01',
+    expirationDate: '2036-06-01',
+    warehouseLocation: 'WH-South / Component Vault 1',
+    status: 'active',
+  }
+];
+
 

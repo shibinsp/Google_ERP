@@ -91,6 +91,8 @@ export const Header: React.FC<HeaderProps> = ({
     agentic_mesh: 'Enterprise Agentic Mesh (EAAF)',
     mcp_protocol: 'Model Context Protocol (MCP) Server',
     governance: 'EU AI Act & Governance Framework',
+    manufacturing: 'Manufacturing BOM & MRP Workspace',
+    crm_sales: 'CRM & Quote-to-Order Pipeline',
   };
 
   const filteredNotifications = notifications.filter((n) => {

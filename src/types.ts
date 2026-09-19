@@ -11,7 +11,7 @@ export interface RoleProfile {
   department: string;
   badgeColor: string;
   description: string;
-  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance'>;
+  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales'>;
   canExecutePayroll: boolean;
   canApprovePayments: boolean;
   canManageInventory: boolean;
@@ -434,4 +434,103 @@ export interface EmpiricalROIMetric {
   domain: string;
   iconName: string;
 }
+
+// Manufacturing & MRP Suite
+export interface BOMComponent {
+  componentSku: string;
+  componentName: string;
+  quantityRequired: number;
+  unitCost: number;
+  extendedCost: number;
+}
+
+export interface WorkOrder {
+  id: string;
+  workOrderNumber: string;
+  finishedGoodSku: string;
+  finishedGoodName: string;
+  targetQuantity: number;
+  completedQuantity: number;
+  startDate: string;
+  targetCompletionDate: string;
+  status: 'draft' | 'in_production' | 'qa_inspection' | 'completed';
+  shopFloorStation: string;
+  allocatedBom: BOMComponent[];
+  unitProductionCost: number;
+  totalOrderCost: number;
+}
+
+// Sales & CRM Quote-to-Order Suite
+export interface CustomerAccount {
+  id: string;
+  accountNumber: string;
+  companyName: string;
+  contactName: string;
+  contactEmail: string;
+  creditLimitUSD: number;
+  outstandingBalanceUSD: number;
+  tier: 'Enterprise Platinum' | 'Gold Volume' | 'Standard Corporate';
+  status: 'active' | 'hold';
+}
+
+export interface SalesQuote {
+  id: string;
+  quoteNumber: string;
+  customerId: string;
+  customerName: string;
+  createdDate: string;
+  validUntil: string;
+  subtotal: number;
+  discountPercent: number;
+  taxAmount: number;
+  totalAmount: number;
+  status: 'draft' | 'quote_sent' | 'approved' | 'converted_to_order';
+  lineItems: {
+    sku: string;
+    description: string;
+    quantity: number;
+    unitPrice: number;
+    total: number;
+  }[];
+}
+
+export interface SalesOrder {
+  id: string;
+  orderNumber: string;
+  quoteReference?: string;
+  customerName: string;
+  orderDate: string;
+  promisedShipDate: string;
+  totalAmount: number;
+  status: 'confirmed' | 'processing' | 'shipped' | 'fulfilled';
+  shippingCarrier: string;
+  trackingNumber: string;
+}
+
+// Multi-Entity GL Consolidation & Multi-Currency Treasury
+export interface MultiEntityConsolidation {
+  entityId: string;
+  entityName: string;
+  region: string;
+  baseCurrency: 'USD' | 'EUR' | 'GBP' | 'JPY' | 'SGD';
+  exchangeRateToUSD: number;
+  localRevenue: number;
+  consolidatedRevenueUSD: number;
+  localOperatingExpenses: number;
+  consolidatedOpExUSD: number;
+}
+
+// Lot & Serial Number Traceability
+export interface LotSerialRecord {
+  id: string;
+  sku: string;
+  itemName: string;
+  lotNumber: string;
+  serialNumber: string;
+  manufacturingDate: string;
+  expirationDate: string;
+  warehouseLocation: string;
+  status: 'active' | 'quarantine' | 'dispatched';
+}
+
 
