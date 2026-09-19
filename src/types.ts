@@ -11,7 +11,7 @@ export interface RoleProfile {
   department: string;
   badgeColor: string;
   description: string;
-  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations'>;
+  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance'>;
   canExecutePayroll: boolean;
   canApprovePayments: boolean;
   canManageInventory: boolean;
@@ -335,3 +335,103 @@ export interface CategoryTurnoverMetric {
   velocityRating: 'World Class' | 'High Velocity' | 'Optimal' | 'Moderate' | 'Slow Mover';
   color: string;
 }
+
+// Enterprise Agentic Architecture Framework (EAAF) & Agentic Mesh
+export interface EAAFAgent {
+  id: string;
+  name: string;
+  classification: 'simple_reflex' | 'model_based' | 'goal_based' | 'utility_based';
+  runtime: 'LangGraph' | 'CrewAI' | 'Amazon Strands' | 'Custom Serverless';
+  domain: 'Finance' | 'Supply Chain' | 'HRMS' | 'Operations' | 'Security';
+  status: 'active' | 'evaluating' | 'paused' | 'kill_switched';
+  utilityScore: number; // 0-100%
+  lastAction: string;
+  lastActionTimestamp: string;
+  tokenVaultPolicy: string; // e.g. "OAuth 2.1 Scope: ledger.write"
+  killSwitchTriggered: boolean;
+  maxSpendThresholdUSD: number;
+  currentSpendUSD: number;
+}
+
+// Model Context Protocol (MCP) Integration Engine
+export interface MCPTool {
+  id: string;
+  name: string;
+  category: 'ERP Data Discovery' | 'Financial Ledger' | 'Supply Chain Routing' | 'HR Ontology';
+  description: string;
+  jsonSchema: string; // JSON schema string
+  endpoint: string;
+  rbacPermission: string;
+  zeroDataRetention: boolean;
+  status: 'connected' | 'standby' | 'rate_limited';
+  callCount24h: number;
+}
+
+// Dynamic Skills Ontology & Workforce Capability
+export interface SkillsOntologyNode {
+  id: string;
+  skillName: string;
+  category: string;
+  inferredFrom: string; // e.g. "Performance Reviews & GitHub commits"
+  proficiencyLevel: 'Expert' | 'Advanced' | 'Intermediate';
+  demandRating: 'High Growth' | 'Stable' | 'Critical Shortage';
+  gapRiskScore: number; // 0-100%
+  employeesCount: number;
+}
+
+// Predictive Employee Attrition & XAI
+export interface EmployeeAttritionRisk {
+  employeeId: string;
+  fullName: string;
+  department: string;
+  roleTitle: string;
+  flightRiskScore: number; // 0-100%
+  flightRiskLevel: 'Critical Risk' | 'High Risk' | 'Moderate' | 'Low';
+  xaiFactors: {
+    factor: string;
+    weight: number; // contribution %
+    description: string;
+  }[];
+  recommendedAction: string;
+}
+
+// EU AI Act & COSO Compliance Suite
+export interface EUAIActModuleRecord {
+  id: string;
+  moduleName: string;
+  riskCategory: 'unacceptable' | 'high_risk' | 'limited_risk' | 'minimal_risk';
+  friaCompleted: boolean;
+  friaDate?: string;
+  humanOversightRequired: boolean;
+  article4LiteracyVerified: boolean;
+  auditLogRetentionDays: number; // 180+ days
+  status: 'compliant' | 'review_required' | 'action_needed';
+}
+
+// Financial Hallucination Mitigation (PCAOB & NIST Compliant)
+export interface HallucinationGuardrailCheck {
+  id: string;
+  queryId: string;
+  timestamp: string;
+  userPrompt: string;
+  ragSourceDocument: string;
+  sourceTraceabilityUrl: string;
+  numericalReconciliationPassed: boolean;
+  glDiscrepancyAmount: number;
+  provenanceFlagged: boolean;
+  humanReviewerSignoff: boolean;
+}
+
+// Empirical ROI & Value Realization
+export interface EmpiricalROIMetric {
+  key: string;
+  title: string;
+  currentValue: string;
+  baselineValue: string;
+  targetValue: string;
+  improvementPercentage: number;
+  financialImpactUSD: number;
+  domain: string;
+  iconName: string;
+}
+

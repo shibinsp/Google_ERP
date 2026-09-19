@@ -55,7 +55,9 @@ export const FinanceView: React.FC<FinanceViewProps> = ({
   globalSearchQuery,
   onOpenInvoiceScanner,
 }) => {
-  const [activeTab, setActiveTab] = useState<'overview' | 'gateways' | 'invoices'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'gateways' | 'invoices' | 'ai_cfo_suite'>('overview');
+  const [mdaOutput, setMdaOutput] = useState<string | null>(null);
+  const [isGeneratingMDA, setIsGeneratingMDA] = useState(false);
   const [searchQuery, setSearchQuery] = useState(globalSearchQuery || '');
   const [invoiceTypeFilter, setInvoiceTypeFilter] = useState<'All' | 'payable' | 'receivable'>('All');
   const [selectedTagFilter, setSelectedTagFilter] = useState<string>('All');
@@ -173,6 +175,15 @@ export const FinanceView: React.FC<FinanceViewProps> = ({
               }`}
             >
               Invoices (AP/AR)
+            </button>
+            <button
+              onClick={() => setActiveTab('ai_cfo_suite')}
+              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1.5 ${
+                activeTab === 'ai_cfo_suite' ? 'bg-indigo-600 text-white font-semibold shadow-2xs' : 'text-indigo-600 hover:text-indigo-900'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>AI CFO Suite</span>
             </button>
           </div>
 
@@ -793,6 +804,121 @@ export const FinanceView: React.FC<FinanceViewProps> = ({
                 </div>
               </form>
             )}
+          </div>
+        </div>
+      )}
+      {/* AI CFO SUITE TAB */}
+      {activeTab === 'ai_cfo_suite' && (
+        <div className="space-y-6">
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-purple-950 text-white shadow-xl border border-indigo-700/40">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold flex items-center space-x-2">
+                  <Sparkles className="w-6 h-6 text-indigo-400" />
+                  <span>AI CFO Suite & Autonomous Treasury Operations</span>
+                </h2>
+                <p className="text-xs text-indigo-200/80 mt-1">
+                  Record-to-Report (R2R) Continuous Close • Order-to-Cash (O2C) &gt;90% Touchless Cash • Procure-to-Pay (P2P) 3-Way Match
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setIsGeneratingMDA(true);
+                  setTimeout(() => {
+                    setMdaOutput(
+                      `### Executive Management Discussion & Analysis (MD&A) Report - Q3 2026\n\n` +
+                      `**1. Financial Performance Summary**:\n` +
+                      `- YTD Revenue expanded **+24.5% YoY** to **$14.85M**, driven by strong Enterprise ERP subscription adoption.\n` +
+                      `- Gross Profit Margin reached **58.4%**, outperforming standard benchmark targets by 340 bps.\n\n` +
+                      `**2. Order-to-Cash (O2C) & Working Capital Optimization**:\n` +
+                      `- Touchless Cash Application Rate sustained at **94.2%**, freeing AR teams from manual remittance matching.\n` +
+                      `- Automated utility dunning agents reduced Days Sales Outstanding (DSO) by **8.4 days**, liberating **$890,000 in working capital**.\n\n` +
+                      `**3. Record-to-Report (R2R) Close Acceleration**:\n` +
+                      `- Month-end close cycle compressed to **3.2 days** (Gartner projected 30% speedup achieved).\n` +
+                      `- 100% of journal entries auto-reconciled against sub-ledgers with zero variance flags.`
+                    );
+                    setIsGeneratingMDA(false);
+                  }, 1000);
+                }}
+                disabled={isGeneratingMDA}
+                className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl text-xs flex items-center space-x-2 shadow-md transition-all disabled:opacity-50"
+              >
+                {isGeneratingMDA ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                <span>{isGeneratingMDA ? 'Generating Report...' : 'Generate Generative MD&A Report'}</span>
+              </button>
+            </div>
+
+            {mdaOutput && (
+              <div className="mt-4 p-4 bg-slate-950/80 rounded-xl border border-indigo-500/30 text-xs text-slate-200 font-mono space-y-2 whitespace-pre-line">
+                {mdaOutput}
+              </div>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* R2R Continuous Close Card */}
+            <div className="p-5 bg-white dark:bg-slate-900 rounded-xl border border-gray-200/80 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <span className="font-semibold text-gray-900 dark:text-white text-sm">Record-to-Report (R2R)</span>
+                <span className="text-xs px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold">Gartner 30% Speedup</span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-slate-300">
+                Continuous financial close engine automatically routes journal entries based on amount risk tiers and validates general ledger integrity.
+              </p>
+              <div className="p-3 bg-gray-50 dark:bg-slate-800/60 rounded-lg text-xs space-y-1">
+                <div className="flex justify-between font-semibold text-gray-900 dark:text-white">
+                  <span>Current Close Duration:</span>
+                  <span className="text-emerald-600 font-mono font-bold">3.2 Days</span>
+                </div>
+                <div className="flex justify-between text-gray-500">
+                  <span>Baseline Legacy Close:</span>
+                  <span className="font-mono">11.5 Days</span>
+                </div>
+              </div>
+            </div>
+
+            {/* O2C Touchless Cash Application Card */}
+            <div className="p-5 bg-white dark:bg-slate-900 rounded-xl border border-gray-200/80 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <span className="font-semibold text-gray-900 dark:text-white text-sm">Order-to-Cash (O2C)</span>
+                <span className="text-xs px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold">&gt;90% Touchless</span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-slate-300">
+                Multi-format remittance extraction matches bank payments to open receivables. Autonomous utility agents execute dynamic dunning.
+              </p>
+              <div className="p-3 bg-gray-50 dark:bg-slate-800/60 rounded-lg text-xs space-y-1">
+                <div className="flex justify-between font-semibold text-gray-900 dark:text-white">
+                  <span>Touchless Match Rate:</span>
+                  <span className="text-indigo-600 font-mono font-bold">94.2%</span>
+                </div>
+                <div className="flex justify-between text-gray-500">
+                  <span>Working Capital Liberated:</span>
+                  <span className="font-mono font-bold text-gray-900 dark:text-white">$890,000</span>
+                </div>
+              </div>
+            </div>
+
+            {/* P2P 3-Way Matching Card */}
+            <div className="p-5 bg-white dark:bg-slate-900 rounded-xl border border-gray-200/80 dark:border-slate-800 shadow-sm space-y-3">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <span className="font-semibold text-gray-900 dark:text-white text-sm">Procure-to-Pay (P2P)</span>
+                <span className="text-xs px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold">80% Cycle Cut</span>
+              </div>
+              <p className="text-xs text-gray-600 dark:text-slate-300">
+                AI computer vision extracts invoice line items, performs 3-way matching against POs and receiving receipts, and flags duplicate/fraud billing.
+              </p>
+              <div className="p-3 bg-gray-50 dark:bg-slate-800/60 rounded-lg text-xs space-y-1">
+                <div className="flex justify-between font-semibold text-gray-900 dark:text-white">
+                  <span>Processing Cycle Time:</span>
+                  <span className="text-purple-600 font-mono font-bold">1.4 Days</span>
+                </div>
+                <div className="flex justify-between text-gray-500">
+                  <span>Duplicate Billing Prevention:</span>
+                  <span className="font-mono text-emerald-600 font-bold">Active (0 Anomalies)</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

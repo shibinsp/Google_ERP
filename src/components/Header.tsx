@@ -88,6 +88,9 @@ export const Header: React.FC<HeaderProps> = ({
     analytics: 'Real-Time Analytics & BI',
     security: 'E2EE Security & Audit Log',
     integrations: 'Google Cloud Sync',
+    agentic_mesh: 'Enterprise Agentic Mesh (EAAF)',
+    mcp_protocol: 'Model Context Protocol (MCP) Server',
+    governance: 'EU AI Act & Governance Framework',
   };
 
   const filteredNotifications = notifications.filter((n) => {

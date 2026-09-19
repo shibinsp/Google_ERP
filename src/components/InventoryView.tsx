@@ -353,6 +353,32 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
           <div className="text-xl font-bold font-mono text-emerald-700 mt-1">8.6x / yr</div>
         </div>
       </div>
+      {/* IIOT PREDICTIVE MAINTENANCE & AUTONOMOUS SOURCING BANNER */}
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white shadow-md border border-indigo-700/40">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center space-x-2 text-indigo-300 font-mono text-xs font-bold uppercase tracking-wider mb-1">
+              <Zap className="w-4 h-4 text-amber-400 animate-pulse" />
+              <span>IIoT Telemetry Sensor Feed & Autonomous Sourcing</span>
+            </div>
+            <h3 className="text-base font-bold text-white">Equipment Predictive Maintenance & 360° Supplier ESG Intelligence</h3>
+            <p className="text-xs text-slate-300 mt-1 max-w-2xl">
+              Monitors CNC thermal & vibration telemetry. Automatically schedules preventive work orders and dispatches autonomous RFQs to top-rated ESG suppliers.
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-3 bg-slate-950/60 p-3 rounded-xl border border-slate-800 text-xs font-mono">
+            <div>
+              <span className="text-gray-400 block">Active Sensors:</span>
+              <span className="text-emerald-400 font-bold">128 Telemetry Nodes (100% Online)</span>
+            </div>
+            <div className="border-l border-slate-800 pl-3">
+              <span className="text-gray-400 block">Supplier ESG Index:</span>
+              <span className="text-purple-300 font-bold">94.8% Benchmark</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* PREDICTIVE FORECASTING & PROJECTED STOCK DEPLETION ENGINE */}
       <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-4">

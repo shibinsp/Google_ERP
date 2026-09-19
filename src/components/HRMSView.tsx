@@ -49,7 +49,7 @@ export const HRMSView: React.FC<HRMSViewProps> = ({
   onUpdateResourceHours,
   globalSearchQuery,
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'directory' | 'resources' | 'payroll'>('directory');
+  const [activeSubTab, setActiveSubTab] = useState<'directory' | 'resources' | 'payroll' | 'ai_talent_intelligence'>('directory');
   const [searchQuery, setSearchQuery] = useState(globalSearchQuery || '');
   const [deptFilter, setDeptFilter] = useState<string>('All');
   const [showAddEmpModal, setShowAddEmpModal] = useState(false);
@@ -185,6 +185,14 @@ export const HRMSView: React.FC<HRMSViewProps> = ({
               }`}
             >
               Payroll Operations
+            </button>
+            <button
+              onClick={() => setActiveSubTab('ai_talent_intelligence')}
+              className={`px-3 py-1.5 rounded-lg transition-colors flex items-center space-x-1 ${
+                activeSubTab === 'ai_talent_intelligence' ? 'bg-indigo-600 text-white font-semibold shadow-2xs' : 'text-indigo-600 hover:text-indigo-900'
+              }`}
+            >
+              <span>AI Talent Intelligence</span>
             </button>
           </div>
 
@@ -539,6 +547,104 @@ export const HRMSView: React.FC<HRMSViewProps> = ({
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* AI TALENT INTELLIGENCE TAB */}
+      {activeSubTab === 'ai_talent_intelligence' && (
+        <div className="space-y-6">
+          <div className="p-6 rounded-2xl bg-gradient-to-r from-purple-950 via-slate-900 to-indigo-950 text-white shadow-xl border border-purple-700/40">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold flex items-center space-x-2">
+                  <Users className="w-6 h-6 text-purple-400" />
+                  <span>AI Talent Intelligence & Predictive Workforce Dynamics</span>
+                </h2>
+                <p className="text-xs text-purple-200/80 mt-1">
+                  Dynamic Skills Ontologies • Explainable AI Attrition Modeling • Internal Talent Marketplace
+                </p>
+              </div>
+              <span className="px-3 py-1 bg-purple-500/20 border border-purple-400/40 text-purple-200 text-xs font-bold rounded-full">
+                Skills Graph Active
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* Dynamic Skills Ontology */}
+            <div className="lg:col-span-6 bg-white dark:bg-slate-900 rounded-xl border border-gray-200/80 dark:border-slate-800 shadow-sm p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Dynamic Skills Ontology Network</h3>
+                <span className="text-xs font-mono text-purple-600">Inferred from PRs & Reviews</span>
+              </div>
+
+              <div className="space-y-3">
+                {[
+                  { name: 'Agentic AI Architecture (LangGraph)', category: 'Engineering', gapRisk: 15, level: 'Expert', staffCount: 6 },
+                  { name: 'FP&A Variance Financial Modeling', category: 'Finance', gapRisk: 28, level: 'Expert', staffCount: 4 },
+                  { name: 'Supply Chain Multi-Echelon Resiliency', category: 'Logistics', gapRisk: 72, level: 'Advanced', staffCount: 2 },
+                  { name: 'EU AI Act & FRIA Compliance Auditing', category: 'Legal & Risk', gapRisk: 85, level: 'Intermediate', staffCount: 1 },
+                ].map((skill, idx) => (
+                  <div key={idx} className="p-3.5 bg-gray-50 dark:bg-slate-800/50 rounded-xl border border-gray-200 dark:border-slate-750 text-xs space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-gray-900 dark:text-white">{skill.name}</span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${skill.gapRisk > 50 ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'}`}>
+                        {skill.gapRisk > 50 ? `High Gap Risk (${skill.gapRisk}%)` : `Optimal Buffer (${skill.gapRisk}%)`}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-gray-500 text-[11px]">
+                      <span>Category: {skill.category}</span>
+                      <span>{skill.staffCount} Staff Members</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Predictive Employee Attrition & XAI Factors */}
+            <div className="lg:col-span-6 bg-white dark:bg-slate-900 rounded-xl border border-gray-200/80 dark:border-slate-800 shadow-sm p-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-gray-200 dark:border-slate-800 pb-3">
+                <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Predictive Attrition Model (Explainable AI - XAI)</h3>
+                <span className="text-xs bg-rose-100 text-rose-800 font-bold px-2 py-0.5 rounded">High Flight Risk Alerts</span>
+              </div>
+
+              <div className="space-y-4 text-xs">
+                <div className="p-4 bg-slate-900 text-white rounded-xl border border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <span className="font-bold text-sm text-white">Elena Rostova</span>
+                      <span className="text-gray-400 text-[11px] block">Principal Systems Architect (Engineering)</span>
+                    </div>
+                    <span className="px-3 py-1 bg-rose-600 text-white font-bold rounded-lg text-xs">
+                      78% Flight Risk
+                    </span>
+                  </div>
+
+                  <div className="space-y-2 pt-2 border-t border-slate-800">
+                    <div className="text-[11px] font-semibold text-slate-300">XAI Feature Weight Driver Breakdown:</div>
+                    <div className="space-y-1 font-mono text-[11px]">
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">1. Compensation Stagnation (42% weight):</span>
+                        <span className="text-rose-400">18% below peer median</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">2. Workload & Overtime (35% weight):</span>
+                        <span className="text-amber-400">54 hrs/wk (3 projects)</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">3. Promotion Interval (23% weight):</span>
+                        <span className="text-purple-300">28 months since promotion</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-2.5 bg-slate-950 rounded-lg text-emerald-400 text-[11px] font-semibold">
+                    Recommended Proactive Action: Schedule stay interview & approve 12% equity retention grant.
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -31,6 +31,10 @@ import {
   DashboardWidgetConfig,
 } from './types';
 
+import { AgenticMeshView } from './components/AgenticMeshView';
+import { MCPIntegrationView } from './components/MCPIntegrationView';
+import { GovernanceComplianceView } from './components/GovernanceComplianceView';
+
 import {
   INITIAL_INVENTORY,
   INITIAL_STOCK_MOVEMENTS,
@@ -45,6 +49,10 @@ import {
   INITIAL_NOTIFICATIONS,
   DEFAULT_DASHBOARD_WIDGETS,
   ROLE_PROFILES,
+  INITIAL_EAAF_AGENTS,
+  INITIAL_MCP_TOOLS,
+  INITIAL_EU_AI_ACT_RECORDS,
+  INITIAL_HALLUCINATION_CHECKS,
 } from './data/initialData';
 
 import {
@@ -84,6 +92,12 @@ export default function App() {
   const [gatewayTransactions, setGatewayTransactions] = useState<PaymentGatewayTransaction[]>(INITIAL_GATEWAY_TRANSACTIONS);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(INITIAL_AUDIT_LOGS);
   const [alerts, setAlerts] = useState<NotificationAlert[]>(INITIAL_NOTIFICATIONS);
+
+  // EAAF, MCP, and EU AI Act Governance States
+  const [eaafAgents, setEaafAgents] = useState(INITIAL_EAAF_AGENTS);
+  const [mcpTools, setMcpTools] = useState(INITIAL_MCP_TOOLS);
+  const [euActRecords, setEuActRecords] = useState(INITIAL_EU_AI_ACT_RECORDS);
+  const [hallucinationChecks, setHallucinationChecks] = useState(INITIAL_HALLUCINATION_CHECKS);
 
   // Security & MFA State
   const [mfaVerified, setMfaVerified] = useState(true);
@@ -750,6 +764,57 @@ export default function App() {
               sheetsUrl={sheetsUrl}
               driveUrl={driveUrl}
               isExporting={isExportingSheets}
+            />
+          )}
+
+          {activeTab === 'agentic_mesh' && (
+            <AgenticMeshView
+              agents={eaafAgents}
+              onToggleAgentStatus={(id) => {
+                setEaafAgents((prev) =>
+                  prev.map((a) => (a.id === id ? { ...a, status: a.status === 'active' ? 'paused' : 'active' } : a))
+                );
+                showToast('Agent operational state updated.');
+              }}
+              onTriggerKillSwitch={(id) => {
+                setEaafAgents((prev) =>
+                  prev.map((a) => (a.id === id ? { ...a, killSwitchTriggered: !a.killSwitchTriggered, status: 'kill_switched' } : a))
+                );
+                logAuditEvent('Security', 'Security', `Emergency Kill-Switch toggled for Agent ${id}`);
+                showToast('Emergency Kill-Switch engaged for agent!');
+              }}
+              onExecuteWorkflowSimulation={() => {
+                showToast('EAAF Multi-Agent Mesh simulation completed successfully.');
+              }}
+            />
+          )}
+
+          {activeTab === 'mcp_protocol' && (
+            <MCPIntegrationView
+              tools={mcpTools}
+              onTestMCPTool={(id) => {
+                setMcpTools((prev) =>
+                  prev.map((t) => (t.id === id ? { ...t, callCount24h: t.callCount24h + 1 } : t))
+                );
+                showToast('MCP JSON-RPC 2.0 call executed via stateless proxy.');
+              }}
+            />
+          )}
+
+          {activeTab === 'governance' && (
+            <GovernanceComplianceView
+              euRecords={euActRecords}
+              hallucinationChecks={hallucinationChecks}
+              onGenerateFRIA={(id) => {
+                showToast('Fundamental Rights Impact Assessment (FRIA) generated and logged.');
+              }}
+              onApproveHumanOversight={(checkId) => {
+                setHallucinationChecks((prev) =>
+                  prev.map((c) => (c.id === checkId ? { ...c, humanReviewerSignoff: true } : c))
+                );
+                logAuditEvent('Security', 'Security', `Audit Committee sign-off approved for Hallucination Check ${checkId}`);
+                showToast('Human-in-the-loop oversight sign-off approved!');
+              }}
             />
           )}
         </main>

@@ -12,14 +12,16 @@ import {
   SlidersHorizontal,
   Building2,
   CheckCircle2,
-  HelpCircle,
-  Activity,
   ChevronDown,
+  HelpCircle,
+  Bot,
+  Cpu,
+  Scale,
 } from 'lucide-react';
 import { UserRole } from '../types';
 import { ROLE_PROFILES } from '../data/initialData';
 
-export type ActiveTab = 'dashboard' | 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations';
+export type ActiveTab = 'dashboard' | 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance';
 
 interface SidebarProps {
   activeTab: ActiveTab;
@@ -61,7 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     icon: React.ElementType;
     badge?: number;
     badgeColor?: string;
-    moduleKey: 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations';
+    moduleKey: 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance';
   }
 
   const operationsNav: NavItem[] = [
@@ -113,6 +115,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Google Cloud Sync',
       icon: CloudCog,
       moduleKey: 'integrations',
+    },
+  ];
+
+  const aiArchitectureNav: NavItem[] = [
+    {
+      id: 'agentic_mesh',
+      label: 'Agentic Mesh (EAAF)',
+      icon: Bot,
+      moduleKey: 'agentic_mesh',
+    },
+    {
+      id: 'mcp_protocol',
+      label: 'MCP Protocol Server',
+      icon: Cpu,
+      moduleKey: 'mcp_protocol',
+    },
+    {
+      id: 'governance',
+      label: 'EU AI Act & Compliance',
+      icon: Scale,
+      moduleKey: 'governance',
     },
   ];
 
@@ -259,6 +282,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 Intelligence & Security
               </div>
               {renderNavList(governanceNav)}
+            </div>
+
+            {/* Section 3: AI Architecture & Governance */}
+            <div className="space-y-1">
+              <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Agentic Mesh & MCP
+              </div>
+              {renderNavList(aiArchitectureNav)}
             </div>
           </div>
         </div>
