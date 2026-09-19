@@ -93,6 +93,11 @@ export const Header: React.FC<HeaderProps> = ({
     governance: 'EU AI Act & Governance Framework',
     manufacturing: 'Manufacturing BOM & MRP Workspace',
     crm_sales: 'CRM & Quote-to-Order Pipeline',
+    ooux_framework: 'Object-Oriented UX (OOUX) ORCA Matrix',
+    design_tokens: 'W3C Design Tokens & CI/CD Pipeline',
+    micro_frontends: 'Webpack Module Federation Micro-Frontends',
+    agentic_ux: 'Agentic UX & Generative UI (A2UI/AG-UI)',
+    ux_roi_analytics: 'System Usability Scale (SUS) & Financial UX ROI',
   };
 
   const filteredNotifications = notifications.filter((n) => {

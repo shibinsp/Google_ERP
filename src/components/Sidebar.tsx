@@ -19,11 +19,15 @@ import {
   Scale,
   Factory,
   ShoppingBag,
+  Network,
+  Palette,
+  Layers,
+  Calculator,
 } from 'lucide-react';
 import { UserRole } from '../types';
 import { ROLE_PROFILES } from '../data/initialData';
 
-export type ActiveTab = 'dashboard' | 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales';
+export type ActiveTab = 'dashboard' | 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales' | 'ooux_framework' | 'design_tokens' | 'micro_frontends' | 'agentic_ux' | 'ux_roi_analytics';
 
 interface SidebarProps {
   activeTab: ActiveTab;
@@ -65,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     icon: React.ElementType;
     badge?: number;
     badgeColor?: string;
-    moduleKey: 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales';
+    moduleKey: 'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales' | 'ooux_framework' | 'design_tokens' | 'micro_frontends' | 'agentic_ux' | 'ux_roi_analytics';
   }
 
   const operationsNav: NavItem[] = [
@@ -150,6 +154,39 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'EU AI Act & Compliance',
       icon: Scale,
       moduleKey: 'governance',
+    },
+  ];
+
+  const uxArchitectureNav: NavItem[] = [
+    {
+      id: 'ooux_framework',
+      label: 'OOUX & ORCA Matrix',
+      icon: Network,
+      moduleKey: 'ooux_framework',
+    },
+    {
+      id: 'design_tokens',
+      label: 'Design Tokens & W3C Pipeline',
+      icon: Palette,
+      moduleKey: 'design_tokens',
+    },
+    {
+      id: 'micro_frontends',
+      label: 'Micro-Frontend Federation',
+      icon: Layers,
+      moduleKey: 'micro_frontends',
+    },
+    {
+      id: 'agentic_ux',
+      label: 'Agentic UX & Generative UI',
+      icon: Bot,
+      moduleKey: 'agentic_ux',
+    },
+    {
+      id: 'ux_roi_analytics',
+      label: 'SUS & UX ROI Analytics',
+      icon: BarChart3,
+      moduleKey: 'ux_roi_analytics',
     },
   ];
 
@@ -304,6 +341,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 Agentic Mesh & MCP
               </div>
               {renderNavList(aiArchitectureNav)}
+            </div>
+
+            {/* Section 4: Enterprise UI/UX Architecture */}
+            <div className="space-y-1">
+              <div className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                Enterprise UI/UX Architecture
+              </div>
+              {renderNavList(uxArchitectureNav)}
             </div>
           </div>
         </div>

@@ -26,6 +26,11 @@ import {
   SalesOrder,
   MultiEntityConsolidation,
   LotSerialRecord,
+  OOUXObject,
+  DesignToken,
+  MicroFrontendConfig,
+  AgenticUXState,
+  UXUsabilityBenchmark,
 } from '../types';
 
 export const ROLE_PROFILES: Record<UserRole, RoleProfile> = {
@@ -35,7 +40,7 @@ export const ROLE_PROFILES: Record<UserRole, RoleProfile> = {
     department: 'Executive / IT Architecture',
     badgeColor: 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
     description: 'Unrestricted enterprise access across all core modules, cloud security governance, E2EE key vault, and global audit logs.',
-    allowedModules: ['inventory', 'hrms', 'finance', 'analytics', 'security', 'integrations', 'agentic_mesh', 'mcp_protocol', 'governance'],
+    allowedModules: ['inventory', 'hrms', 'finance', 'analytics', 'security', 'integrations', 'agentic_mesh', 'mcp_protocol', 'governance', 'manufacturing', 'crm_sales', 'ooux_framework', 'design_tokens', 'micro_frontends', 'agentic_ux', 'ux_roi_analytics'],
     canExecutePayroll: true,
     canApprovePayments: true,
     canManageInventory: true,
@@ -1665,6 +1670,193 @@ export const INITIAL_LOT_SERIALS: LotSerialRecord[] = [
     expirationDate: '2036-06-01',
     warehouseLocation: 'WH-South / Component Vault 1',
     status: 'active',
+  }
+];
+
+export const INITIAL_OOUX_OBJECTS: OOUXObject[] = [
+  {
+    id: 'ooux-01',
+    name: 'Customer Account',
+    description: 'Enterprise commercial counterparty with credit limits and contract terms.',
+    attributes: {
+      coreContent: ['accountNumber', 'companyName', 'creditLimitUSD', 'outstandingBalanceUSD'],
+      metadata: ['createdTimestamp', 'lastAuditedDate', 'primaryAccountManager'],
+      stateValues: ['active', 'credit_hold', 'pending_approval'],
+    },
+    relationships: [
+      { targetObject: 'SalesQuote', cardinality: '1:N', description: 'Generates commercial quotes' },
+      { targetObject: 'SalesOrder', cardinality: '1:N', description: 'Places fulfillment orders' },
+    ],
+    callsToAction: [
+      { action: 'Adjust Credit Limit', requiredRole: 'finance_controller', impact: 'high' },
+      { action: 'Place Credit Hold', requiredRole: 'super_admin', impact: 'critical' },
+    ],
+  },
+  {
+    id: 'ooux-02',
+    name: 'Inventory SKU',
+    description: 'Physical serialized component or raw material tracked in warehouse bay.',
+    attributes: {
+      coreContent: ['sku', 'name', 'category', 'currentStock', 'unitCost'],
+      metadata: ['warehouseLocation', 'supplier', 'turnoverRatio'],
+      stateValues: ['optimal', 'low_stock', 'critical', 'overstocked'],
+    },
+    relationships: [
+      { targetObject: 'StockMovement', cardinality: '1:N', description: 'Logs ledger transactions' },
+      { targetObject: 'BOMComponent', cardinality: '1:N', description: 'Acts as assembly component' },
+    ],
+    callsToAction: [
+      { action: 'Execute Quick Reorder', requiredRole: 'supply_chain_mgr', impact: 'medium' },
+      { action: 'Adjust Safety Stock', requiredRole: 'super_admin', impact: 'high' },
+    ],
+  }
+];
+
+export const INITIAL_DESIGN_TOKENS: DesignToken[] = [
+  {
+    id: 'tok-01',
+    name: 'color.primitive.indigo.600',
+    category: 'color',
+    layer: 'primitive',
+    value: '#4f46e5',
+    comment: 'Base indigo brand value (W3C DTCG Format)',
+  },
+  {
+    id: 'tok-02',
+    name: 'color.semantic.brand.primary',
+    category: 'color',
+    layer: 'semantic',
+    value: '{color.primitive.indigo.600}',
+    aliasOf: 'color.primitive.indigo.600',
+    comment: 'Primary action color alias',
+  },
+  {
+    id: 'tok-03',
+    name: 'color.component.button.primary.background',
+    category: 'color',
+    layer: 'component',
+    value: '{color.semantic.brand.primary}',
+    aliasOf: 'color.semantic.brand.primary',
+    comment: 'Button background token',
+  },
+  {
+    id: 'tok-04',
+    name: 'spacing.semantic.container.padding',
+    category: 'spacing',
+    layer: 'semantic',
+    value: '1.5rem',
+    comment: 'Standard layout padding',
+  },
+  {
+    id: 'tok-05',
+    name: 'elevation.component.modal.shadow',
+    category: 'elevation',
+    layer: 'component',
+    value: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+    comment: 'Modal dialog elevation shadow',
+  }
+];
+
+export const INITIAL_MICRO_FRONTENDS: MicroFrontendConfig[] = [
+  {
+    id: 'mfe-01',
+    name: 'Checkout & Order Entry Remote',
+    filename: 'remoteEntry.js',
+    scope: 'checkoutRemote',
+    exposedModules: {
+      './CheckoutFlow': './src/remotes/CheckoutFlow.tsx',
+      './PaymentTerminal': './src/remotes/PaymentTerminal.tsx',
+    },
+    remotes: {
+      shellHost: 'http://localhost:3000/remoteEntry.js',
+    },
+    sharedDependencies: ['react', 'react-dom', 'lucide-react', 'tailwindcss'],
+    status: 'online',
+    latencyMs: 18,
+  },
+  {
+    id: 'mfe-02',
+    name: 'Inventory & Stock Velocity Remote',
+    filename: 'remoteEntry.js',
+    scope: 'inventoryRemote',
+    exposedModules: {
+      './StockLedger': './src/remotes/StockLedger.tsx',
+      './BarcodeScanner': './src/remotes/BarcodeScanner.tsx',
+    },
+    remotes: {
+      shellHost: 'http://localhost:3000/remoteEntry.js',
+    },
+    sharedDependencies: ['react', 'react-dom', 'recharts'],
+    status: 'online',
+    latencyMs: 24,
+  }
+];
+
+export const INITIAL_AGENTIC_PATTERNS: AgenticUXState[] = [
+  {
+    id: 'ag-ux-01',
+    agentName: 'Aura ERP Autonomous Logistics Agent',
+    autonomyLevel: 75,
+    intentPreview: {
+      actionName: 'Re-route APAC Semiconductor Shipments',
+      targetResource: 'Purchase Orders PO-9941 to PO-9945',
+      affectedCount: 5,
+      riskTier: 'moderate',
+    },
+    explainableRationale: {
+      rulesApplied: [
+        'Rule LOG-88: Port Congestion > 72h triggers air freight re-routing.',
+        'Rule FIN-12: Expedited freight budget cap is $45,000.',
+      ],
+      sourceKnowledgeBase: 'Enterprise Logistics Policy v4.2 & Port Authority Real-Time Feed',
+      algorithmReasoning: 'Selected Singapore Air Freight Hub (SIN-01) over Sea Freight (SGP-PORT) to prevent 12-day assembly line shutdown.',
+    },
+    confidenceSignal: {
+      score: 0.94,
+      status: 'high_confidence',
+    },
+    actionAuditLog: [
+      { timestamp: '2026-09-19 14:05:12', action: 'Initiated Port Congestion Scan', rollbackAvailable: false },
+      { timestamp: '2026-09-19 14:05:30', action: 'Calculated Air Freight Surcharge ($18,400)', rollbackAvailable: true },
+      { timestamp: '2026-09-19 14:06:01', action: 'Generated Intent Preview for Human Sign-off', rollbackAvailable: true },
+    ],
+  }
+];
+
+export const INITIAL_UX_BENCHMARKS: UXUsabilityBenchmark[] = [
+  {
+    id: 'ux-bench-01',
+    moduleName: 'Inventory & Stock Velocity Workspace',
+    susScore: 84.5,
+    umuxLiteScore: 88.0,
+    nasaTlxWorkload: {
+      mentalDemand: 28,
+      temporalDemand: 22,
+      effort: 25,
+    },
+    operationalMetrics: {
+      taskSuccessRate: 98.4,
+      timeOnTaskSeconds: 142,
+      userErrorRate: 0.8,
+      annualDollarsSaved: 420000,
+    },
+  },
+  {
+    id: 'ux-bench-02',
+    moduleName: 'Financial Gateways & Multi-Entity Treasury',
+    susScore: 81.0,
+    umuxLiteScore: 85.5,
+    nasaTlxWorkload: {
+      mentalDemand: 34,
+      temporalDemand: 30,
+      effort: 32,
+    },
+    operationalMetrics: {
+      taskSuccessRate: 96.8,
+      timeOnTaskSeconds: 195,
+      userErrorRate: 1.2,
+      annualDollarsSaved: 680000,
+    },
   }
 ];
 

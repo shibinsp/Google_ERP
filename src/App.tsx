@@ -40,6 +40,11 @@ import { MCPIntegrationView } from './components/MCPIntegrationView';
 import { GovernanceComplianceView } from './components/GovernanceComplianceView';
 import { ManufacturingView } from './components/ManufacturingView';
 import { CRMSalesView } from './components/CRMSalesView';
+import { OOUXFrameworkView } from './components/OOUXFrameworkView';
+import { DesignTokensPipelineView } from './components/DesignTokensPipelineView';
+import { MicroFrontendsView } from './components/MicroFrontendsView';
+import { AgenticUXStudioView } from './components/AgenticUXStudioView';
+import { UXROIMetricsView } from './components/UXROIMetricsView';
 
 import {
   INITIAL_INVENTORY,
@@ -63,6 +68,11 @@ import {
   INITIAL_CUSTOMERS,
   INITIAL_SALES_QUOTES,
   INITIAL_SALES_ORDERS,
+  INITIAL_OOUX_OBJECTS,
+  INITIAL_DESIGN_TOKENS,
+  INITIAL_MICRO_FRONTENDS,
+  INITIAL_AGENTIC_PATTERNS,
+  INITIAL_UX_BENCHMARKS,
 } from './data/initialData';
 
 import {
@@ -114,6 +124,13 @@ export default function App() {
   const [customers, setCustomers] = useState<CustomerAccount[]>(INITIAL_CUSTOMERS);
   const [quotes, setQuotes] = useState<SalesQuote[]>(INITIAL_SALES_QUOTES);
   const [orders, setOrders] = useState<SalesOrder[]>(INITIAL_SALES_ORDERS);
+
+  // Enterprise UI/UX Architecture States
+  const [oouxObjects, setOouxObjects] = useState(INITIAL_OOUX_OBJECTS);
+  const [designTokens, setDesignTokens] = useState(INITIAL_DESIGN_TOKENS);
+  const [microFrontends, setMicroFrontends] = useState(INITIAL_MICRO_FRONTENDS);
+  const [agenticPatterns, setAgenticPatterns] = useState(INITIAL_AGENTIC_PATTERNS);
+  const [uxBenchmarks, setUxBenchmarks] = useState(INITIAL_UX_BENCHMARKS);
 
   // Security & MFA State
   const [mfaVerified, setMfaVerified] = useState(true);
@@ -890,6 +907,31 @@ export default function App() {
                 }
               }}
             />
+          )}
+
+          {activeTab === 'ooux_framework' && (
+            <OOUXFrameworkView objects={oouxObjects} />
+          )}
+
+          {activeTab === 'design_tokens' && (
+            <DesignTokensPipelineView tokens={designTokens} />
+          )}
+
+          {activeTab === 'micro_frontends' && (
+            <MicroFrontendsView remotes={microFrontends} />
+          )}
+
+          {activeTab === 'agentic_ux' && (
+            <AgenticUXStudioView
+              patterns={agenticPatterns}
+              onTriggerRollback={(agentId, timestamp) => {
+                showToast(`Triggered 1-Click Rollback for ${agentId} at ${timestamp}`);
+              }}
+            />
+          )}
+
+          {activeTab === 'ux_roi_analytics' && (
+            <UXROIMetricsView benchmarks={uxBenchmarks} />
           )}
         </main>
       </div>

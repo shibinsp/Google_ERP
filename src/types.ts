@@ -11,7 +11,7 @@ export interface RoleProfile {
   department: string;
   badgeColor: string;
   description: string;
-  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales'>;
+  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales' | 'ooux_framework' | 'design_tokens' | 'micro_frontends' | 'agentic_ux' | 'ux_roi_analytics'>;
   canExecutePayroll: boolean;
   canApprovePayments: boolean;
   canManageInventory: boolean;
@@ -531,6 +531,98 @@ export interface LotSerialRecord {
   expirationDate: string;
   warehouseLocation: string;
   status: 'active' | 'quarantine' | 'dispatched';
+}
+
+// Object-Oriented UX (OOUX) ORCA Framework
+export interface OOUXObject {
+  id: string;
+  name: string;
+  description: string;
+  attributes: {
+    coreContent: string[];
+    metadata: string[];
+    stateValues: string[];
+  };
+  relationships: {
+    targetObject: string;
+    cardinality: '1:1' | '1:N' | 'N:M';
+    description: string;
+  }[];
+  callsToAction: {
+    action: string;
+    requiredRole: UserRole;
+    impact: 'low' | 'medium' | 'high' | 'critical';
+  }[];
+}
+
+// W3C Design Tokens Community Group (DTCG) Format
+export interface DesignToken {
+  id: string;
+  name: string;
+  category: 'color' | 'typography' | 'spacing' | 'elevation' | 'motion';
+  layer: 'primitive' | 'semantic' | 'component';
+  value: string;
+  aliasOf?: string;
+  comment?: string;
+}
+
+// Webpack Module Federation Micro-Frontend Remote Config
+export interface MicroFrontendConfig {
+  id: string;
+  name: string;
+  filename: string;
+  scope: string;
+  exposedModules: Record<string, string>;
+  remotes: Record<string, string>;
+  sharedDependencies: string[];
+  status: 'online' | 'degraded' | 'offline';
+  latencyMs: number;
+}
+
+// 6-Pattern Agentic UX State & Generative UI Payload
+export interface AgenticUXState {
+  id: string;
+  agentName: string;
+  autonomyLevel: number; // 0 - 100%
+  intentPreview: {
+    actionName: string;
+    targetResource: string;
+    affectedCount: number;
+    riskTier: 'low' | 'moderate' | 'critical';
+  };
+  explainableRationale: {
+    rulesApplied: string[];
+    sourceKnowledgeBase: string;
+    algorithmReasoning: string;
+  };
+  confidenceSignal: {
+    score: number; // 0.0 - 1.0
+    status: 'high_confidence' | 'human_oversight_required';
+  };
+  actionAuditLog: {
+    timestamp: string;
+    action: string;
+    rollbackAvailable: boolean;
+  }[];
+}
+
+// System Usability Scale (SUS), NASA-TLX & ROI Financial Metrics
+export interface UXUsabilityBenchmark {
+  id: string;
+  moduleName: string;
+  susScore: number; // 0 - 100
+  umuxLiteScore: number; // 0 - 100
+  nasaTlxWorkload: {
+    mentalDemand: number; // 1 - 100
+    temporalDemand: number;
+    effort: number;
+  };
+  operationalMetrics: {
+    taskSuccessRate: number; // percentage
+    timeOnTaskSeconds: number;
+    userErrorRate: number; // percentage
+    annualDollarsSaved: number;
+  };
 }
 
 
