@@ -88,6 +88,7 @@ export default function App() {
   const [currentRole, setCurrentRole] = useState<UserRole>('super_admin');
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
 
   // Modals & Command Center
@@ -636,10 +637,14 @@ export default function App() {
         onCloseMobile={() => setIsMobileMenuOpen(false)}
         onOpenCustomizeModal={() => setIsCustomizeModalOpen(true)}
         onOpenShortcutsModal={() => setIsShortcutsModalOpen(true)}
+        isCollapsed={isSidebarCollapsed}
+        onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden lg:pl-64">
+      <div className={`flex-1 flex flex-col min-w-0 overflow-x-hidden transition-all duration-200 ${
+        isSidebarCollapsed ? 'lg:pl-20' : 'lg:pl-64'
+      }`}>
         {/* Responsive Header */}
         <Header
           currentRole={currentRole}
