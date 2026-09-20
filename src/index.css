@@ -4,14 +4,29 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+
+    /* Stormy Morning Palette from Figma */
+    --color-stormy-50: #f4f8fc;
+    --color-stormy-100: #bdddfc;
+    --color-stormy-200: #88bdf2;
+    --color-stormy-400: #6a89a7;
+    --color-stormy-700: #384959;
+    --color-stormy-800: #293643;
+    --color-stormy-900: #1c2630;
+    --color-stormy-950: #111820;
   }
 
   body {
     font-family: var(--font-sans);
-    background-color: #f8fafc;
-    color: #0f172a;
+    background-color: #f4f8fc;
+    color: #1c2630;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  .dark body {
+    background-color: #111820;
+    color: #f4f8fc;
   }
 }
 

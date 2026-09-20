@@ -288,12 +288,12 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
       {/* Top Header & Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <Boxes className="w-6 h-6 text-indigo-600" />
-            <span>Inventory & Warehouse Management</span>
+          <h1 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-2">
+            <Boxes className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            <span>Inventory</span>
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            Real-time stock ledger, automated low-stock triggers, multi-warehouse tracking, and turnover analytics.
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            Track stock levels, monitor reorder alerts, manage warehouses, and record item movements.
           </p>
         </div>
 
@@ -304,43 +304,43 @@ export const InventoryView: React.FC<InventoryViewProps> = ({
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-2xs transition-colors"
           >
             <Camera className="w-3.5 h-3.5" />
-            <span>Scan SKU Barcode</span>
+            <span>Scan Barcode</span>
           </button>
 
           <button
             id="inventory-batch-qr-btn"
             onClick={() => handleOpenQrModal()}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-2xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-800 shadow-2xs transition-colors"
           >
-            <QrCode className="w-3.5 h-3.5 text-indigo-600" />
+            <QrCode className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
             <span>QR Labels</span>
           </button>
 
           <button
             id="inventory-lot-serial-btn"
             onClick={() => setShowLotModal(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-2xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-800 shadow-2xs transition-colors"
           >
-            <Boxes className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Lot & Serial Traceability</span>
+            <Boxes className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>Lots & Serials</span>
           </button>
 
           <button
             id="inventory-record-movement-btn"
             onClick={() => handleOpenMovementModal()}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-slate-900 text-xs font-semibold border border-slate-200 shadow-2xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-800 shadow-2xs transition-colors"
           >
-            <ArrowRightLeft className="w-3.5 h-3.5 text-indigo-600" />
-            <span>Record Movement</span>
+            <ArrowRightLeft className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>Move Stock</span>
           </button>
 
           <button
             id="inventory-add-sku-btn"
             onClick={() => setShowAddSkuModal(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-2xs transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 dark:bg-indigo-600 hover:bg-slate-800 text-white text-xs font-semibold shadow-2xs transition-colors"
           >
             <Plus className="w-4 h-4" />
-            <span>Add New SKU</span>
+            <span>Add Item</span>
           </button>
         </div>
       </div>
