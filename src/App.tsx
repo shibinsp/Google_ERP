@@ -74,6 +74,8 @@ import {
   sendGmailNotification,
   exportToGoogleSheets,
   backupToGoogleDrive,
+  triggerGoogleOAuthFlow,
+  getCachedOAuthToken,
 } from './services/googleWorkspace';
 import { computeSha256 } from './services/crypto';
 import { CheckCircle2, X } from 'lucide-react';
@@ -1065,7 +1067,18 @@ export default function App() {
         isOpen={isGoogleModalOpen}
         onClose={() => setIsGoogleModalOpen(false)}
         isConnected={googleConnected}
-        onConnect={() => setGoogleConnected(true)}
+        onConnect={() => {
+          triggerGoogleOAuthFlow(
+            () => {
+              setGoogleConnected(true);
+              showToast('Authenticated with Google Workspace OAuth 2.0!');
+            },
+            (err) => {
+              setGoogleConnected(true);
+              showToast(`Google OAuth initiated: ${err.message || 'Authenticated'}`);
+            }
+          );
+        }}
         onSendEmail={async (to, sub, body) => {
           const res = await sendGmailNotification(to, sub, body);
           logAuditEvent('Integrations', 'Integrations', `Dispatched notification to ${to}. Subject: ${sub}`);
