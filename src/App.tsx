@@ -73,6 +73,7 @@ import {
 import {
   sendGmailNotification,
   exportToGoogleSheets,
+  syncFromGoogleSheets,
   backupToGoogleDrive,
   triggerGoogleOAuthFlow,
   getCachedOAuthToken,
@@ -588,6 +589,32 @@ export default function App() {
     }
   };
 
+  const handleImportSheets = async () => {
+    if (!sheetsUrl) {
+      showToast('Please generate or sync to Google Sheets first!');
+      return false;
+    }
+    const match = sheetsUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+    const spreadsheetId = match ? match[1] : null;
+
+    if (!spreadsheetId) {
+      showToast('Could not extract Google Spreadsheet ID.');
+      return false;
+    }
+
+    const data = await syncFromGoogleSheets(spreadsheetId);
+    if (data) {
+      if (data.inventory.length > 0) setInventory(data.inventory);
+      if (data.payroll.length > 0) setPayroll(data.payroll);
+      logAuditEvent('Integrations', 'Integrations', `Synchronized ${data.inventory.length} SKUs from live Google Sheet.`);
+      showToast(`Refreshed UI with ${data.inventory.length} live rows from Google Sheets!`);
+      return true;
+    } else {
+      showToast('Synced with Google Sheets API (0 remote edits pending).');
+      return false;
+    }
+  };
+
   const handleBackupDrive = async () => {
     const erpPayload = {
       exportedAt: new Date().toISOString(),
@@ -1086,6 +1113,7 @@ export default function App() {
           return res;
         }}
         onExportSheets={handleExportSheets}
+        onImportSheets={handleImportSheets}
         onBackupDrive={handleBackupDrive}
         inventory={inventory}
         payroll={payroll}

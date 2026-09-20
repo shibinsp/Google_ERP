@@ -21,6 +21,7 @@ interface GoogleIntegrationModalProps {
   onConnect: () => void;
   onSendEmail: (to: string, subject: string, body: string) => Promise<boolean>;
   onExportSheets: () => Promise<string | null>;
+  onImportSheets?: () => Promise<boolean>;
   onBackupDrive: () => Promise<string | null>;
   inventory: InventoryItem[];
   payroll: PayrollRecord[];
@@ -35,6 +36,7 @@ export const GoogleIntegrationModal: React.FC<GoogleIntegrationModalProps> = ({
   onConnect,
   onSendEmail,
   onExportSheets,
+  onImportSheets,
   onBackupDrive,
   inventory,
   payroll,
@@ -54,6 +56,7 @@ export const GoogleIntegrationModal: React.FC<GoogleIntegrationModalProps> = ({
 
   // Sheets & Drive state
   const [isSyncingSheets, setIsSyncingSheets] = useState(false);
+  const [isImportingSheets, setIsImportingSheets] = useState(false);
   const [sheetsResultUrl, setSheetsResultUrl] = useState<string | null>(sheetsUrl || null);
 
   const [isBackingUpDrive, setIsBackingUpDrive] = useState(false);
@@ -282,22 +285,44 @@ export const GoogleIntegrationModal: React.FC<GoogleIntegrationModalProps> = ({
               </div>
             )}
 
-            <div className="flex justify-end gap-2 pt-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition-colors"
-              >
-                Close
-              </button>
-              <button
-                onClick={handleSyncSheets}
-                disabled={isSyncingSheets}
-                className="flex items-center gap-2 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-2xs transition-colors disabled:opacity-50"
-              >
-                {isSyncingSheets ? <RefreshCw className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4" />}
-                <span>{isSyncingSheets ? 'Generating Spreadsheet...' : 'Sync to Google Sheets Now'}</span>
-              </button>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 pt-2">
+              {onImportSheets ? (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setIsImportingSheets(true);
+                    try {
+                      await onImportSheets();
+                    } finally {
+                      setIsImportingSheets(false);
+                    }
+                  }}
+                  disabled={isImportingSheets}
+                  className="flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-semibold text-xs border border-indigo-200 dark:border-indigo-800 transition-colors disabled:opacity-50"
+                  title="Pull edits made directly inside Google Sheets into application UI"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 ${isImportingSheets ? 'animate-spin' : ''}`} />
+                  <span>{isImportingSheets ? 'Pulling Sheets Edits...' : 'Pull & Refresh UI from Google Sheets'}</span>
+                </button>
+              ) : <div />}
+
+              <div className="flex items-center justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium transition-colors"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={handleSyncSheets}
+                  disabled={isSyncingSheets}
+                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow-2xs transition-colors disabled:opacity-50"
+                >
+                  {isSyncingSheets ? <RefreshCw className="w-4 h-4 animate-spin" /> : <FileSpreadsheet className="w-4 h-4" />}
+                  <span>{isSyncingSheets ? 'Exporting to Sheets...' : 'Sync to Google Sheets Now'}</span>
+                </button>
+              </div>
             </div>
           </div>
         )}

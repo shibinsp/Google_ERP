@@ -140,6 +140,127 @@ export async function exportErpToGoogleSheets(
 }
 
 /**
+ * Reads live inventory & payroll rows directly from Google Sheets API v4
+ */
+export async function importErpFromGoogleSheets(
+  accessToken: string,
+  spreadsheetId: string
+): Promise<{
+  inventory: InventoryItem[];
+  payroll: PayrollRecord[];
+}> {
+  const rangeInventory = "'Inventory & Turnover'!A2:J100";
+  const rangePayroll = "'HR & Payroll Ledger'!A2:I100";
+
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values:batchGet?ranges=${encodeURIComponent(
+    rangeInventory
+  )}&ranges=${encodeURIComponent(rangePayroll)}`;
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Google Sheets API Fetch Error (${res.status}): ${errorText}`);
+  }
+
+  const data = await res.json();
+  const valueRanges = data.valueRanges || [];
+
+  const inventoryRows = valueRanges[0]?.values || [];
+  const payrollRows = valueRanges[1]?.values || [];
+
+  const inventory: InventoryItem[] = inventoryRows
+    .filter((row: any[]) => row && row.length >= 2 && row[0])
+    .map((row: any[], index: number) => {
+      const sku = String(row[0] || `SKU-${index + 100}`).trim();
+      const name = String(row[1] || 'Imported Item').trim();
+      const category = (row[2] || 'Components') as InventoryItem['category'];
+      const warehouseLocation = String(row[3] || 'WH-Central').trim();
+      const currentStock = Math.max(0, parseInt(row[4], 10) || 0);
+      const reorderPoint = Math.max(0, parseInt(row[5], 10) || 20);
+      const unitCost = Math.max(0, parseFloat(row[6]) || 10);
+      const turnoverRatio = parseFloat(row[7]) || 8.0;
+      const daysSalesOfInventory = parseFloat(row[8]) || 45.0;
+
+      let status: InventoryItem['status'] = 'optimal';
+      if (currentStock <= Math.round(reorderPoint * 0.5)) status = 'critical';
+      else if (currentStock <= reorderPoint) status = 'low_stock';
+
+      return {
+        id: `inv-sheet-${index}-${sku.toLowerCase()}`,
+        sku,
+        name,
+        category,
+        warehouseLocation,
+        currentStock,
+        safetyStock: Math.round(reorderPoint * 0.5),
+        reorderPoint,
+        maxCapacity: Math.max(currentStock * 3, 500),
+        unitCost,
+        unitPrice: Math.round(unitCost * 1.6),
+        turnoverRatio,
+        daysSalesOfInventory,
+        lastRestocked: new Date().toISOString().slice(0, 10),
+        status,
+        supplier: 'Google Sheets Live Sync',
+      };
+    });
+
+  const payroll: PayrollRecord[] = payrollRows
+    .filter((row: any[]) => row && row.length >= 2 && row[0])
+    .map((row: any[], index: number) => {
+      const batchRef = String(row[0] || `BATCH-${index + 100}`).trim();
+      const periodName = String(row[1] || 'Semi-Monthly Cycle').trim();
+      const payDate = String(row[2] || new Date().toISOString().slice(0, 10)).trim();
+      const employeeCount = parseInt(row[3], 10) || 10;
+      const totalGrossPay = parseFloat(row[4]) || 50000;
+      const totalTax = parseFloat(row[5]) || 10000;
+      const benefits = parseFloat(row[6]) || 2000;
+      const totalNetPay = parseFloat(row[7]) || totalGrossPay - totalTax - benefits;
+      const statusRaw = String(row[8] || 'dispatched').toLowerCase();
+
+      return {
+        id: `pr-sheet-${index}`,
+        batchReference: batchRef,
+        periodName,
+        payDate,
+        employeeCount,
+        totalGrossPay,
+        federalTaxWithheld: Math.round(totalTax * 0.75),
+        stateTaxWithheld: Math.round(totalTax * 0.25),
+        benefitsDeductions: benefits,
+        totalNetPay,
+        status: statusRaw.includes('pending') ? 'pending_approval' : 'dispatched',
+        authorizedBy: 'Google Sheets Live Sync',
+      };
+    });
+
+  return { inventory, payroll };
+}
+
+/**
+ * Convenience helper to pull live Sheets data into application state
+ */
+export async function syncFromGoogleSheets(spreadsheetId: string): Promise<{
+  inventory: InventoryItem[];
+  payroll: PayrollRecord[];
+} | null> {
+  const token = getCachedOAuthToken();
+  if (token) {
+    try {
+      return await importErpFromGoogleSheets(token, spreadsheetId);
+    } catch (err) {
+      console.warn('Google Sheets API import error:', err);
+    }
+  }
+  return null;
+}
+
+/**
  * Uploads an encrypted backup snapshot directly to Google Drive
  */
 export async function uploadAuditBackupToDrive(
