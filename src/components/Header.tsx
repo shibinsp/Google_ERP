@@ -417,31 +417,53 @@ export const Header: React.FC<HeaderProps> = ({
               )}
             </div>
 
-            {/* Role-Based Access Control (RBAC) Profile Switcher */}
+            {/* User Profile & Role-Based Access Control (RBAC) Switcher */}
             <div className="relative">
               <button
                 id="header-role-dropdown-btn"
                 onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                className="flex items-center gap-2 pl-2.5 pr-2 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-left shadow-2xs transition-colors"
+                className="flex items-center gap-2 pl-2 pr-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-left shadow-2xs transition-colors"
               >
-                <div className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400"></div>
+                <div className="w-6 h-6 rounded-lg bg-indigo-600 dark:bg-indigo-500 text-white font-bold text-[10px] flex items-center justify-center tracking-wider shadow-2xs">
+                  SP
+                </div>
                 <div className="hidden lg:block text-left">
-                  <div className="text-xs font-semibold text-slate-900 dark:text-white truncate max-w-[130px]">
+                  <div className="text-xs font-bold text-slate-900 dark:text-white truncate max-w-[120px] leading-tight">
+                    Shibin P
+                  </div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-none truncate max-w-[120px]">
                     {roleProfile.title.split('(')[0]}
                   </div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400 leading-none">RBAC Profile</div>
                 </div>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               {showRoleDropdown && (
-                <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in duration-150">
-                  <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
-                    <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                      Switch RBAC Profile
+                <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in duration-150">
+                  {/* Real User Card Header */}
+                  <div className="px-3.5 py-2.5 border-b border-slate-100 dark:border-slate-800 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                      SP
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs font-bold text-slate-900 dark:text-white truncate flex items-center gap-1.5">
+                        <span>Shibin P</span>
+                        <span className="px-1.5 py-0.2 rounded text-[9px] bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-mono font-semibold border border-emerald-200 dark:border-emerald-800">
+                          Active User
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate font-mono">
+                        {userEmail || 'shibinsp43@gmail.com'}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="px-3 py-1.5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-950/30">
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      Switch Role Access
                     </span>
                     <span className="text-[10px] px-1.5 py-0.2 rounded bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-mono font-semibold">
-                      Multi-Tenant
+                      Multi-Tenant RBAC
                     </span>
                   </div>
 

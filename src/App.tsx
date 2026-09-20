@@ -682,7 +682,7 @@ export default function App() {
             showToast(`Gmail alert dispatched for "${notif.title}"`);
           }}
           googleConnected={googleConnected}
-          userEmail="cio-admin@enterprise-corp.io"
+          userEmail="shibinsp43@gmail.com"
           onGoogleSignIn={() => setGoogleConnected(true)}
           onGoogleSignOut={() => setGoogleConnected(false)}
           onToggleMobileSidebar={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
