@@ -168,122 +168,136 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Right Controls: Theme Toggle, Command, MFA, Google Sync, Notifications, RBAC */}
-          <div className="flex items-center gap-2">
-            {/* Dark / Light Theme Toggle Button */}
-            {onToggleTheme && (
+          {/* Right Controls Zone: Grouped into System Tools, AI & Cloud Actions, and Workspace & User Profile */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Sub-group 1: System Tools & Security */}
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {/* Dark / Light Theme Toggle Button */}
+              {onToggleTheme && (
+                <button
+                  id="header-theme-toggle-btn"
+                  onClick={onToggleTheme}
+                  title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                  className="p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-2xs transition-colors"
+                  aria-label="Toggle Theme"
+                >
+                  {theme === 'dark' ? (
+                    <Sun className="w-4 h-4 text-amber-400" />
+                  ) : (
+                    <Moon className="w-4 h-4 text-slate-600" />
+                  )}
+                </button>
+              )}
+
+              {/* Quick Command Palette Button for Mobile / Small Screens */}
               <button
-                id="header-theme-toggle-btn"
-                onClick={onToggleTheme}
-                title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-                className="p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-2xs transition-colors"
-                aria-label="Toggle Theme"
+                id="header-command-palette-btn"
+                onClick={onOpenCommandPalette}
+                title="Open Command Center (⌘K)"
+                className="md:hidden p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs transition-colors"
+                aria-label="Command Palette"
               >
-                {theme === 'dark' ? (
-                  <Sun className="w-4 h-4 text-amber-400" />
-                ) : (
-                  <Moon className="w-4 h-4 text-slate-600" />
-                )}
+                <Command className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </button>
-            )}
 
-            {/* Quick Command Palette Button for Mobile / Small Screens */}
-            <button
-              id="header-command-palette-btn"
-              onClick={onOpenCommandPalette}
-              title="Open Command Center (⌘K)"
-              className="md:hidden p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs transition-colors"
-              aria-label="Command Palette"
-            >
-              <Command className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            </button>
-
-            {/* Keyboard Shortcuts Trigger Button */}
-            <button
-              id="header-shortcuts-btn"
-              onClick={onOpenShortcutsModal}
-              title="Keyboard Shortcuts Reference Guide (?)"
-              className="hidden sm:flex items-center gap-1 px-2 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs text-xs font-medium transition-colors"
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-              <kbd className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400">?</kbd>
-            </button>
-
-            {/* MFA Security Status Pill */}
-            <button
-              id="header-mfa-btn"
-              onClick={onOpenMfaModal}
-              title="Multi-Factor Authentication & E2EE Vault Status"
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-colors shadow-2xs ${
-                mfaVerified
-                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200/80 hover:bg-emerald-100/70'
-                  : 'bg-amber-50 text-amber-800 border-amber-200/80 hover:bg-amber-100/70'
-              }`}
-            >
-              <KeyRound className="w-3.5 h-3.5" />
-              <span className="hidden xl:inline">{mfaVerified ? 'MFA Verified' : 'MFA Required'}</span>
-            </button>
-
-            {/* AI Invoice Vision Scanner Button */}
-            {onOpenInvoiceScanner && (
+              {/* Keyboard Shortcuts Trigger Button */}
               <button
-                id="header-scan-invoice-btn"
-                onClick={onOpenInvoiceScanner}
-                title="Scan Invoice or Bill with Gemini AI Vision (⌘I)"
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-700 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/40 text-slate-700 dark:text-slate-300 hover:text-emerald-800 dark:hover:text-emerald-300 text-xs font-medium shadow-2xs transition-all"
+                id="header-shortcuts-btn"
+                onClick={onOpenShortcutsModal}
+                title="Keyboard Shortcuts Reference Guide (?)"
+                className="hidden sm:flex items-center gap-1 px-2 py-1.5 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs text-xs font-medium transition-colors"
               >
-                <Camera className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span className="hidden lg:inline">Scan Bill</span>
+                <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+                <kbd className="text-[10px] font-mono font-semibold text-slate-500 dark:text-slate-400">?</kbd>
               </button>
-            )}
 
-            {/* AI Copilot Chatbot Button */}
-            {onOpenChatbot && (
+              {/* MFA Security Status Pill */}
               <button
-                id="header-ai-copilot-btn"
-                onClick={onOpenChatbot}
-                title="Open Aura ERP Copilot (⌘J)"
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-2xs transition-all active:scale-95"
+                id="header-mfa-btn"
+                onClick={onOpenMfaModal}
+                title="Multi-Factor Authentication & E2EE Vault Status"
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-colors shadow-2xs ${
+                  mfaVerified
+                    ? 'bg-emerald-50 text-emerald-700 border-emerald-200/80 hover:bg-emerald-100/70 dark:bg-emerald-950/60 dark:text-emerald-400 dark:border-emerald-800/80'
+                    : 'bg-amber-50 text-amber-800 border-amber-200/80 hover:bg-amber-100/70 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800/80'
+                }`}
               >
-                <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
-                <span>AI Copilot</span>
-                <span className="hidden xl:inline px-1 py-0.2 rounded bg-indigo-500/60 text-[10px] font-mono text-indigo-100">
-                  ⌘J
+                <KeyRound className="w-3.5 h-3.5" />
+                <span className="hidden xl:inline">{mfaVerified ? 'MFA Verified' : 'MFA Required'}</span>
+              </button>
+            </div>
+
+            {/* Vertical Divider */}
+            <div className="hidden sm:block h-4 w-px bg-slate-200 dark:bg-slate-800 my-auto" />
+
+            {/* Sub-group 2: AI & Cloud Integrations */}
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {/* AI Invoice Vision Scanner Button */}
+              {onOpenInvoiceScanner && (
+                <button
+                  id="header-scan-invoice-btn"
+                  onClick={onOpenInvoiceScanner}
+                  title="Scan Invoice or Bill with Gemini AI Vision (⌘I)"
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-300 dark:hover:border-emerald-700 hover:bg-emerald-50/40 dark:hover:bg-emerald-950/40 text-slate-700 dark:text-slate-300 hover:text-emerald-800 dark:hover:text-emerald-300 text-xs font-medium shadow-2xs transition-all"
+                >
+                  <Camera className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <span className="hidden lg:inline">Scan Bill</span>
+                </button>
+              )}
+
+              {/* AI Copilot Chatbot Button */}
+              {onOpenChatbot && (
+                <button
+                  id="header-ai-copilot-btn"
+                  onClick={onOpenChatbot}
+                  title="Open Aura ERP Copilot (⌘J)"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shadow-2xs transition-all active:scale-95"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-indigo-200" />
+                  <span>AI Copilot</span>
+                  <span className="hidden xl:inline px-1 py-0.2 rounded bg-indigo-500/60 text-[10px] font-mono text-indigo-100">
+                    ⌘J
+                  </span>
+                </button>
+              )}
+
+              {/* Google Workspace Cloud Integrations Status */}
+              <button
+                id="header-google-workspace-btn"
+                onClick={onOpenGoogleModal}
+                title="Google Workspace (Sheets, Drive, Gmail) Integrations"
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-colors shadow-2xs ${
+                  googleConnected
+                    ? 'bg-indigo-50/70 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800 hover:bg-indigo-100/70 dark:hover:bg-indigo-900/70'
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
+                }`}
+              >
+                <div className="flex items-center -space-x-1">
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                  <HardDrive className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                  <Mail className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
+                </div>
+                <span className="hidden xl:inline">
+                  {googleConnected ? 'Workspace Active' : 'Connect Cloud'}
                 </span>
               </button>
-            )}
+            </div>
 
-            {/* Google Workspace Cloud Integrations Status */}
-            <button
-              id="header-google-workspace-btn"
-              onClick={onOpenGoogleModal}
-              title="Google Workspace (Sheets, Drive, Gmail) Integrations"
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-medium border transition-colors shadow-2xs ${
-                googleConnected
-                  ? 'bg-indigo-50/70 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 border-indigo-200/80 dark:border-indigo-800 hover:bg-indigo-100/70 dark:hover:bg-indigo-900/70'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700'
-              }`}
-            >
-              <div className="flex items-center -space-x-1">
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <HardDrive className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                <Mail className="w-3.5 h-3.5 text-red-600 dark:text-red-400" />
-              </div>
-              <span className="hidden xl:inline">
-                {googleConnected ? 'Workspace Active' : 'Connect Cloud'}
-              </span>
-            </button>
+            {/* Vertical Divider */}
+            <div className="hidden sm:block h-4 w-px bg-slate-200 dark:bg-slate-800 my-auto" />
 
-            {/* Customize Dashboard Button */}
-            <button
-              id="header-customize-workspace-btn"
-              onClick={onOpenCustomizeModal}
-              title="Customize Role Workspace Widgets"
-              className="p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white shadow-2xs transition-colors"
-              aria-label="Customize Workspace"
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-            </button>
+            {/* Sub-group 3: Workspace Tools, Alerts & RBAC Profile */}
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              {/* Customize Dashboard Button */}
+              <button
+                id="header-customize-workspace-btn"
+                onClick={onOpenCustomizeModal}
+                title="Customize Role Workspace Widgets"
+                className="p-2 rounded-xl bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white shadow-2xs transition-colors"
+                aria-label="Customize Workspace"
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+              </button>
 
             {/* Notification Bell with Filterable Dropdown */}
             <div className="relative">
@@ -473,6 +487,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
       </div>
-    </header>
+    </div>
+  </header>
   );
 };
