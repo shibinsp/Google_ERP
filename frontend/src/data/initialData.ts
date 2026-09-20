@@ -40,7 +40,7 @@ export const ROLE_PROFILES: Record<UserRole, RoleProfile> = {
     department: 'Executive / IT Architecture',
     badgeColor: 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950/60 dark:text-purple-300 dark:border-purple-800',
     description: 'Unrestricted enterprise access across all core modules, cloud security governance, E2EE key vault, and global audit logs.',
-    allowedModules: ['inventory', 'hrms', 'finance', 'analytics', 'security', 'integrations', 'agentic_mesh', 'mcp_protocol', 'governance', 'manufacturing', 'crm_sales'],
+    allowedModules: ['inventory', 'hrms', 'finance', 'analytics', 'security', 'integrations', 'agentic_mesh', 'workflow_builder', 'mcp_protocol', 'governance', 'manufacturing', 'crm_sales'],
     canExecutePayroll: true,
     canApprovePayments: true,
     canManageInventory: true,

@@ -36,10 +36,12 @@ import {
 } from './types';
 
 import { AgenticMeshView } from './components/AgenticMeshView';
+import { WorkflowBuilderView } from './components/WorkflowBuilderView';
 import { MCPIntegrationView } from './components/MCPIntegrationView';
 import { GovernanceComplianceView } from './components/GovernanceComplianceView';
 import { ManufacturingView } from './components/ManufacturingView';
 import { CRMSalesView } from './components/CRMSalesView';
+import { EnterpriseOrgProvider } from './context/EnterpriseOrgContext';
 
 import {
   INITIAL_INVENTORY,
@@ -81,7 +83,7 @@ import {
 import { computeSha256 } from './services/crypto';
 import { CheckCircle2, X } from 'lucide-react';
 
-export default function App() {
+function AppContent() {
   // Navigation & Role State
   const [currentRole, setCurrentRole] = useState<UserRole>('super_admin');
   const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard');
@@ -873,6 +875,10 @@ export default function App() {
             />
           )}
 
+          {activeTab === 'workflow_builder' && (
+            <WorkflowBuilderView />
+          )}
+
           {activeTab === 'mcp_protocol' && (
             <MCPIntegrationView
               tools={mcpTools}
@@ -1121,5 +1127,13 @@ export default function App() {
         driveUrl={driveUrl}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <EnterpriseOrgProvider>
+      <AppContent />
+    </EnterpriseOrgProvider>
   );
 }

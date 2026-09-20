@@ -24,10 +24,12 @@ import {
   Bot,
   Sun,
   Moon,
+  Building2,
 } from 'lucide-react';
 import { UserRole, NotificationAlert } from '../types';
 import { ROLE_PROFILES } from '../data/initialData';
 import { ActiveTab } from './Sidebar';
+import { useEnterpriseOrg } from '../context/EnterpriseOrgContext';
 
 interface HeaderProps {
   currentRole: UserRole;
@@ -78,6 +80,8 @@ export const Header: React.FC<HeaderProps> = ({
   theme = 'light',
   onToggleTheme,
 }) => {
+  const { currentOrg, switchOrg, allOrgs } = useEnterpriseOrg();
+  const [showOrgDropdown, setShowOrgDropdown] = useState(false);
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifFilter, setNotifFilter] = useState<'all' | 'unread' | 'critical'>('all');
@@ -412,6 +416,73 @@ export const Header: React.FC<HeaderProps> = ({
                     <p className="text-[10px] text-slate-500 dark:text-slate-400">
                       Auto-triggered when stock drops below safety buffers or payroll batches require sign-off.
                     </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Multi-Tenant Organization Switcher */}
+            <div className="relative">
+              <button
+                id="header-org-dropdown-btn"
+                onClick={() => setShowOrgDropdown(!showOrgDropdown)}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 text-left shadow-2xs transition-colors"
+                title={`Active Enterprise Tenant: ${currentOrg.name}`}
+              >
+                <Building2 className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                <div className="hidden xl:block text-left">
+                  <div className="text-[11px] font-bold text-slate-900 dark:text-white truncate max-w-[130px] leading-tight">
+                    {currentOrg.name.split(' ')[0]} {currentOrg.division.split(' ')[0]}
+                  </div>
+                  <div className="text-[9px] text-slate-500 dark:text-slate-400 leading-none truncate max-w-[130px] font-mono">
+                    {currentOrg.currency} • {currentOrg.region.split('/')[0]}
+                  </div>
+                </div>
+                <ChevronDown className="w-3 h-3 text-slate-400" />
+              </button>
+
+              {showOrgDropdown && (
+                <div className="absolute right-0 mt-2 w-84 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-2xl py-2 z-50 animate-in fade-in duration-150">
+                  <div className="px-3.5 py-2 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+                      Enterprise Tenant Switcher
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 font-mono font-semibold">
+                      SOC2 Tenant Isolation
+                    </span>
+                  </div>
+
+                  <div className="p-1.5 space-y-1">
+                    {allOrgs.map((org) => {
+                      const isSelected = currentOrg.id === org.id;
+                      return (
+                        <button
+                          key={org.id}
+                          onClick={() => {
+                            switchOrg(org.id);
+                            setShowOrgDropdown(false);
+                          }}
+                          className={`w-full text-left p-2.5 rounded-xl text-xs transition-colors flex items-start gap-2.5 ${
+                            isSelected
+                              ? 'bg-indigo-50 dark:bg-indigo-950/70 text-indigo-900 dark:text-indigo-200 border border-indigo-200/80 dark:border-indigo-800 font-semibold'
+                              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                          }`}
+                        >
+                          <Building2
+                            className={`w-4 h-4 mt-0.5 shrink-0 ${
+                              isSelected ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'
+                            }`}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="font-semibold text-slate-900 dark:text-white truncate">{org.name}</div>
+                            <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">{org.division}</div>
+                            <div className="text-[9px] text-indigo-600 dark:text-indigo-400 font-mono mt-0.5">
+                              {org.region} • {org.complianceLevel}
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}

@@ -97,6 +97,43 @@ export interface ExecutionLogPayload {
   goal_aligned?: boolean;
 }
 
+export interface CopilotToolCall {
+  tool_name: string;
+  parameters: Record<string, any>;
+  result: Record<string, any>;
+}
+
+export interface CopilotResponse {
+  response: string;
+  action_type: string;
+  tool_calls: CopilotToolCall[];
+  timestamp: string;
+  suggested_followups: string[];
+}
+
+export interface StreamEvent {
+  timestamp: string;
+  agent: string;
+  role: string;
+  action: string;
+  tokens_processed: number;
+  latency_ms: number;
+  confidence_score: number;
+  status: string;
+  mesh_node: string;
+}
+
+export interface BIDataset {
+  dataset_name: string;
+  table_name: string;
+  schema_version: string;
+  exported_at: string;
+  total_records: number;
+  bigquery_table_id: string;
+  looker_explore_url: string;
+  data: Array<Record<string, any>>;
+}
+
 // ── API Functions ─────────────────────────────────────────────────────────
 
 export const erpApi = {
@@ -123,4 +160,16 @@ export const erpApi = {
   leaderboard: () => apiFetch<LeaderboardEntry[]>("/api/metrics/leaderboard"),
   benchmark: () =>
     apiFetch<BenchmarkResult>("/api/metrics/benchmark", { method: "POST" }),
+
+  // Copilot Autonomous Tool-Calling
+  copilotChat: (message: string, context?: Record<string, any>) =>
+    apiFetch<CopilotResponse>("/api/copilot/chat", {
+      method: "POST",
+      body: JSON.stringify({ message, context }),
+    }),
+
+  // BigQuery / Looker Export
+  exportBI: () => apiFetch<BIDataset>("/api/bi/export"),
+  getLookerSchema: () => apiFetch<Record<string, any>>("/api/bi/looker-schema"),
 };
+

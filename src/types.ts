@@ -11,7 +11,7 @@ export interface RoleProfile {
   department: string;
   badgeColor: string;
   description: string;
-  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales' | 'ooux_framework' | 'design_tokens' | 'micro_frontends' | 'agentic_ux' | 'ux_roi_analytics'>;
+  allowedModules: Array<'inventory' | 'hrms' | 'finance' | 'analytics' | 'security' | 'integrations' | 'agentic_mesh' | 'workflow_builder' | 'mcp_protocol' | 'governance' | 'manufacturing' | 'crm_sales' | 'ooux_framework' | 'design_tokens' | 'micro_frontends' | 'agentic_ux' | 'ux_roi_analytics'>;
   canExecutePayroll: boolean;
   canApprovePayments: boolean;
   canManageInventory: boolean;

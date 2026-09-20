@@ -29,6 +29,7 @@ import {
   PayrollRecord,
   UserRole,
 } from '../types';
+import { erpApi } from '../services/api';
 
 interface ChatbotDrawerProps {
   isOpen: boolean;
@@ -133,31 +134,51 @@ How can I help you today? You can select a quick prompt below or type any questi
         avgDsi: 43.5,
       };
 
-      const payloadMessages = [...messages, userMsg].map((m) => ({
-        role: m.role,
-        content: m.content,
-      }));
+      let text = '';
+      let actions: ChatMessage['actions'] = [];
 
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: payloadMessages,
-          erpContext,
-        }),
-      });
+      try {
+        const copilotRes = await erpApi.copilotChat(query.trim(), erpContext);
+        text = copilotRes.response;
 
-      if (!response.ok) {
-        throw new Error(`Server returned status ${response.status}`);
+        if (copilotRes.suggested_followups && copilotRes.suggested_followups.length > 0) {
+          actions = copilotRes.suggested_followups.map((f) => ({
+            label: f,
+            actionType: 'filter',
+            target: f.toLowerCase().includes('finance')
+              ? 'finance'
+              : f.toLowerCase().includes('inventory')
+              ? 'inventory'
+              : f.toLowerCase().includes('mesh')
+              ? 'agentic_mesh'
+              : undefined,
+          }));
+        }
+      } catch {
+        // Fallback to Express /api/chat endpoint
+        const payloadMessages = [...messages, userMsg].map((m) => ({
+          role: m.role,
+          content: m.content,
+        }));
+
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            messages: payloadMessages,
+            erpContext,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Server returned status ${response.status}`);
+        }
+
+        const data = await response.json();
+        text = data.reply || 'No response received.';
       }
 
-      const data = await response.json();
-
-      // Check if response contains suggestions for action buttons
-      const text = data.reply || 'No response received.';
-      const actions: ChatMessage['actions'] = [];
       const lower = text.toLowerCase();
-
       if (lower.includes('invoice') || lower.includes('bill') || lower.includes('scan')) {
         actions.push({ label: 'Scan an Invoice / Bill', actionType: 'scan_invoice' });
       }

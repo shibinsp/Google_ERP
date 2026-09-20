@@ -20,6 +20,7 @@ import {
   ShoppingBag,
   PanelLeftClose,
   PanelLeftOpen,
+  Workflow,
 } from 'lucide-react';
 import { UserRole } from '../types';
 import { ROLE_PROFILES } from '../data/initialData';
@@ -33,6 +34,7 @@ export type ActiveTab =
   | 'security'
   | 'integrations'
   | 'agentic_mesh'
+  | 'workflow_builder'
   | 'mcp_protocol'
   | 'governance'
   | 'manufacturing'
@@ -90,6 +92,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       | 'security'
       | 'integrations'
       | 'agentic_mesh'
+      | 'workflow_builder'
       | 'mcp_protocol'
       | 'governance'
       | 'manufacturing'
@@ -166,6 +169,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'AI Agents',
       icon: Bot,
       moduleKey: 'agentic_mesh',
+    },
+    {
+      id: 'workflow_builder',
+      label: 'Agent Workflows',
+      icon: Workflow,
+      moduleKey: 'workflow_builder',
     },
     {
       id: 'mcp_protocol',

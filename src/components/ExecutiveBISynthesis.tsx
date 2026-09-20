@@ -155,6 +155,36 @@ export const ExecutiveBISynthesis: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Google BigQuery & Looker Studio Data Warehouse Connector */}
+      <div className="p-4 rounded-xl bg-slate-900 text-white border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <h4 className="text-sm font-bold text-white flex items-center gap-1.5">
+              Google BigQuery & Looker Studio Warehouse Pipeline
+            </h4>
+            <span className="px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px] font-mono border border-indigo-500/30">
+              v2.4 Live
+            </span>
+          </div>
+          <p className="text-xs text-slate-400">
+            Automated continuous streaming of ERP general ledger, turnover velocity, and agent telemetry into BigQuery table <code className="text-indigo-300 font-mono">gcp-enterprise-erp.bi_analytics.executive_synthesis</code>.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="https://lookerstudio.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md transition-colors"
+          >
+            <span>Open Looker Studio</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </div>
     </div>
   );
 };

@@ -11,7 +11,7 @@ from sqlmodel import select
 from sqlmodel.ext.asyncio.session import AsyncSession
 
 from database import init_db, AsyncSessionLocal
-from routers import health, agents, metrics
+from routers import health, agents, metrics, streams, copilot, bi
 from models.agent import AgentMetrics
 from data.agents_seed import AGENTS_SEED
 from services.evaluator import _compute_utility_score, _compute_grade
@@ -63,7 +63,7 @@ async def _seed_agents():
 
 app = FastAPI(
     title="Enterprise ERP Suite — Agent Metrics API",
-    description="FastAPI backend providing real agent evaluation metrics, leaderboard, and execution log ingestion.",
+    description="FastAPI backend providing real agent evaluation metrics, leaderboard, copilot tool-calling, and live streams.",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -81,6 +81,9 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(agents.router)
 app.include_router(metrics.router)
+app.include_router(streams.router)
+app.include_router(copilot.router)
+app.include_router(bi.router)
 
 
 @app.get("/")
@@ -92,5 +95,7 @@ async def root():
         "agents": "/api/agents",
         "metrics_summary": "/api/metrics/summary",
         "leaderboard": "/api/metrics/leaderboard",
-        "benchmark": "/api/metrics/benchmark (POST)",
+        "copilot": "/api/copilot/chat",
+        "streams": "/api/streams/agent-activity",
+        "bi_export": "/api/bi/export",
     }

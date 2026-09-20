@@ -91,6 +91,40 @@ export const AgenticMeshView: React.FC<AgenticMeshViewProps> = ({
 
   useEffect(() => { fetchAll(); }, [fetchAll]);
 
+  // Live SSE Telemetry Stream Listener
+  useEffect(() => {
+    let eventSource: EventSource | null = null;
+    try {
+      eventSource = new EventSource('http://localhost:8000/api/streams/agent-activity');
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          const time = new Date(data.timestamp).toTimeString().slice(0, 8);
+          setSimulationLog((prev) => [
+            {
+              timestamp: time,
+              source: data.agent,
+              target: data.role,
+              message: `${data.action} (${data.tokens_processed} tokens, ${data.latency_ms}ms, ${(data.confidence_score * 100).toFixed(1)}% conf)`,
+              status: data.status.toLowerCase(),
+            },
+            ...prev.slice(0, 25),
+          ]);
+        } catch {
+          // ignore parse errors
+        }
+      };
+    } catch {
+      // EventSource fallback
+    }
+
+    return () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+  }, []);
+
   const handleEvaluate = async (agentId: string) => {
     setEvaluatingId(agentId);
     try {
