@@ -448,6 +448,7 @@ export const InvoiceScannerModal: React.FC<InvoiceScannerModalProps> = ({
           </div>
 
           <button
+            id="invoice-scanner-close-btn"
             onClick={onClose}
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
           >

@@ -104,41 +104,41 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const operationsNav: NavItem[] = [
     {
       id: 'dashboard',
-      label: 'Executive Dashboard',
+      label: 'Dashboard',
       icon: LayoutDashboard,
       moduleKey: 'analytics',
     },
     {
       id: 'inventory',
-      label: 'Inventory & Stock Velocity',
+      label: 'Inventory',
       icon: Boxes,
       badge: lowStockCount > 0 ? lowStockCount : undefined,
-      badgeColor: 'bg-rose-50 text-rose-700 border-rose-200',
+      badgeColor: 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800',
       moduleKey: 'inventory',
     },
     {
       id: 'manufacturing',
-      label: 'Manufacturing & MRP',
+      label: 'Manufacturing',
       icon: Factory,
       moduleKey: 'manufacturing',
     },
     {
       id: 'crm_sales',
-      label: 'CRM & Quote-to-Order',
+      label: 'Sales & CRM',
       icon: ShoppingBag,
       moduleKey: 'crm_sales',
     },
     {
       id: 'hrms',
-      label: 'HRMS & Workforce Capacity',
+      label: 'Human Resources',
       icon: Users,
       badge: pendingPayrollCount > 0 ? pendingPayrollCount : undefined,
-      badgeColor: 'bg-amber-50 text-amber-800 border-amber-200',
+      badgeColor: 'bg-amber-50 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-800',
       moduleKey: 'hrms',
     },
     {
       id: 'finance',
-      label: 'Financials & Gateways',
+      label: 'Finance & Payments',
       icon: DollarSign,
       moduleKey: 'finance',
     },
@@ -147,19 +147,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const governanceNav: NavItem[] = [
     {
       id: 'analytics',
-      label: 'Real-Time Analytics & BI',
+      label: 'Analytics & Reports',
       icon: BarChart3,
       moduleKey: 'analytics',
     },
     {
       id: 'security',
-      label: 'E2EE Security & Audit Log',
+      label: 'Security & Logs',
       icon: ShieldCheck,
       moduleKey: 'security',
     },
     {
       id: 'integrations',
-      label: 'Google Cloud Sync',
+      label: 'Integrations',
       icon: CloudCog,
       moduleKey: 'integrations',
     },
@@ -168,19 +168,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const aiArchitectureNav: NavItem[] = [
     {
       id: 'agentic_mesh',
-      label: 'Agentic Mesh (EAAF)',
+      label: 'AI Agents',
       icon: Bot,
       moduleKey: 'agentic_mesh',
     },
     {
       id: 'mcp_protocol',
-      label: 'MCP Protocol Server',
+      label: 'MCP Tools',
       icon: Cpu,
       moduleKey: 'mcp_protocol',
     },
     {
       id: 'governance',
-      label: 'EU AI Act & Compliance',
+      label: 'AI Governance',
       icon: Scale,
       moduleKey: 'governance',
     },
@@ -351,9 +351,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
               {/* Grouped Navigation Links */}
               <div className="p-3 space-y-4 overflow-y-auto flex-1">
-                {renderNavList(operationsNav, 'Core Operations')}
-                {renderNavList(governanceNav, 'Intelligence & Security')}
-                {renderNavList(aiArchitectureNav, 'Agentic Mesh & MCP')}
+                {renderNavList(operationsNav, 'Operations')}
+                {renderNavList(governanceNav, 'Analytics & Security')}
+                {renderNavList(aiArchitectureNav, 'AI & Systems')}
               </div>
             </div>
 

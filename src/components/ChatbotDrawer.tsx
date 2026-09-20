@@ -288,6 +288,7 @@ How can I help you today? You can select a quick prompt below or type any questi
             {isExpanded ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
           </button>
           <button
+            id="chatbot-close-btn"
             onClick={onClose}
             title="Close Assistant"
             className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
