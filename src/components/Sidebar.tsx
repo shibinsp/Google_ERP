@@ -36,12 +36,7 @@ export type ActiveTab =
   | 'mcp_protocol'
   | 'governance'
   | 'manufacturing'
-  | 'crm_sales'
-  | 'ooux_framework'
-  | 'design_tokens'
-  | 'micro_frontends'
-  | 'agentic_ux'
-  | 'ux_roi_analytics';
+  | 'crm_sales';
 
 interface SidebarProps {
   activeTab: ActiveTab;

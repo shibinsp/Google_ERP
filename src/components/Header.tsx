@@ -99,11 +99,6 @@ export const Header: React.FC<HeaderProps> = ({
     governance: 'AI Governance',
     manufacturing: 'Manufacturing',
     crm_sales: 'Sales & CRM',
-    ooux_framework: 'OOUX Framework',
-    design_tokens: 'Design Tokens',
-    micro_frontends: 'Micro-Frontends',
-    agentic_ux: 'Agentic UX Studio',
-    ux_roi_analytics: 'UX ROI Analytics',
   };
 
   const filteredNotifications = notifications.filter((n) => {

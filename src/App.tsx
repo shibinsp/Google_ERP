@@ -40,11 +40,6 @@ import { MCPIntegrationView } from './components/MCPIntegrationView';
 import { GovernanceComplianceView } from './components/GovernanceComplianceView';
 import { ManufacturingView } from './components/ManufacturingView';
 import { CRMSalesView } from './components/CRMSalesView';
-import { OOUXFrameworkView } from './components/OOUXFrameworkView';
-import { DesignTokensPipelineView } from './components/DesignTokensPipelineView';
-import { MicroFrontendsView } from './components/MicroFrontendsView';
-import { AgenticUXStudioView } from './components/AgenticUXStudioView';
-import { UXROIMetricsView } from './components/UXROIMetricsView';
 
 import {
   INITIAL_INVENTORY,
@@ -934,31 +929,6 @@ export default function App() {
                 }
               }}
             />
-          )}
-
-          {activeTab === 'ooux_framework' && (
-            <OOUXFrameworkView objects={oouxObjects} />
-          )}
-
-          {activeTab === 'design_tokens' && (
-            <DesignTokensPipelineView tokens={designTokens} />
-          )}
-
-          {activeTab === 'micro_frontends' && (
-            <MicroFrontendsView remotes={microFrontends} />
-          )}
-
-          {activeTab === 'agentic_ux' && (
-            <AgenticUXStudioView
-              patterns={agenticPatterns}
-              onTriggerRollback={(agentId, timestamp) => {
-                showToast(`Triggered 1-Click Rollback for ${agentId} at ${timestamp}`);
-              }}
-            />
-          )}
-
-          {activeTab === 'ux_roi_analytics' && (
-            <UXROIMetricsView benchmarks={uxBenchmarks} />
           )}
         </main>
       </div>
