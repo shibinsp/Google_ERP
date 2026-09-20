@@ -324,3 +324,40 @@ export async function backupToGoogleDrive(snapshotData: any): Promise<string> {
   return `https://drive.google.com/file/d/${fileId}/view`;
 }
 
+export function getGoogleClientId(): string {
+  return import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+}
+
+/**
+ * Triggers official Google OAuth 2.0 Identity Services popup for Sheets, Drive & Gmail permissions
+ */
+export function triggerGoogleOAuthFlow(onSuccess: (token: string) => void, onError?: (err: any) => void) {
+  const clientId = getGoogleClientId();
+  if (!clientId) {
+    console.warn('VITE_GOOGLE_CLIENT_ID is missing in .env');
+    if (onError) onError(new Error('VITE_GOOGLE_CLIENT_ID missing'));
+    return;
+  }
+
+  if (typeof window !== 'undefined' && window.google?.accounts?.oauth2) {
+    const client = window.google.accounts.oauth2.initTokenClient({
+      client_id: clientId,
+      scope: 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.file https://www.googleapis.com/auth/gmail.send',
+      callback: (response) => {
+        if (response.access_token) {
+          setCachedOAuthToken(response.access_token);
+          onSuccess(response.access_token);
+        } else if (response.error) {
+          console.error('Google OAuth error:', response.error);
+          if (onError) onError(response.error);
+        }
+      },
+    });
+    client.requestAccessToken({ prompt: 'consent' });
+  } else {
+    console.warn('Google Identity Services script not yet loaded.');
+    if (onError) onError(new Error('Google GIS script not loaded'));
+  }
+}
+
+
